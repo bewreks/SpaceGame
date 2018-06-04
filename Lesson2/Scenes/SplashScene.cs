@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using Lesson2.Drawables;
 using Lesson2.Scenes;
 
@@ -7,9 +6,11 @@ namespace Lesson2
 {
     public class SplashScene : Scene
     {
-        private byte alpha;
-        private int wait;
-        private Action _action;
+        private float alpha;
+        private float wait;
+        private Function _action;
+
+        private delegate void Function(float totalSeconds);
 
         public override void Load()
         {
@@ -27,19 +28,19 @@ namespace Lesson2
         {
             base.Draw(graphics);
             
-            graphics.FillRectangle(new SolidBrush(Color.FromArgb(alpha, Color.Black)), 0, 0, Drawer.Width, Drawer.Height);
+            graphics.FillRectangle(new SolidBrush(Color.FromArgb((int) alpha, Color.Black)), 0, 0, Drawer.Width, Drawer.Height);
         }
 
-        public override void Update()
+        public override void Update(float totalSeconds)
         {
             // На каждый апдейт вызывается FadeIn, FadeOut или Wait
             // при достижении определенных параметров эти методы сами меняются на нужные
-            _action?.Invoke();
+            _action?.Invoke(totalSeconds);
         }
-        
-        private void FadeIn()
+
+        private void FadeIn(float totalSeconds)
         {
-            alpha += 5;
+            alpha += 200 * totalSeconds;
             if (alpha >= 255)
             {
                 _action = null;
@@ -47,19 +48,19 @@ namespace Lesson2
             }
         }
 
-        private void FadeOut()
+        private void FadeOut(float totalSeconds)
         {
-            alpha -= 5;
+            alpha -= 200 * totalSeconds;
             if (alpha <= 0)
             {
                 _action = Wait;
             }
         }
 
-        private void Wait()
+        private void Wait(float totalSeconds)
         {
-            wait += 1;
-            if (wait >= 40)
+            wait += totalSeconds;
+            if (wait >= 5)
             {
                 _action = FadeIn;
             }

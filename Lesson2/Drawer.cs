@@ -14,6 +14,8 @@ namespace Lesson2
         
         private static int _width;
         private static int _height;
+        
+        private static DateTime _dateTime;
 
         public static int Width {
             get => _width;
@@ -40,8 +42,6 @@ namespace Lesson2
             }
         }
 
-        public static Scene Scene => _scene;
-
         // Метод установки сцены
         // Сразу же нужно создать все объекты сцены
         public static void SetScene(Scene scene)
@@ -57,17 +57,30 @@ namespace Lesson2
             Width = form.Width;
             Height = form.Height;
             _buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
+            _dateTime = DateTime.Now;
         }
         
         // Очитить, отрисовать сцену, если есть, отрендерить
         public static void Draw()
         {
-            _buffer.Graphics.Clear(Color.Black);
+            while (true)
+            {
+                _buffer.Graphics.Clear(Color.Black);
 
-            _scene?.Draw(_buffer.Graphics);
-            
-            _buffer.Render();
+                _scene?.Draw(_buffer.Graphics);
+
+                _buffer.Render();
+            }
         }
 
+        public static void Update()
+        {
+            while (true)
+            {
+                var dateTime = DateTime.Now;
+                _scene?.Update((float) (dateTime - _dateTime).TotalSeconds);
+                _dateTime = dateTime;
+            }
+        }
     }
 }

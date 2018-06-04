@@ -8,7 +8,7 @@ namespace Lesson2.Drawables.BaseObjects
     // Для объектов с коллизией нужно использовать класс CollisionGameObjects
     public abstract class GameObjects : IDrawable, IUpdatable
     {
-        protected Point _position;
+        protected PointF _position;
         protected Point _dir;
         protected Size _size;
 
@@ -41,23 +41,7 @@ namespace Lesson2.Drawables.BaseObjects
             _size = size;
         }
         
-        public Point GetPosition()
-        {
-            return _position;
-        }
-
-        public virtual void SetPosition(int x, int y)
-        {
-            _position.X = x;
-            _position.Y = y;
-        }
-
-        public void SetPosition(Point pos)
-        {
-            SetPosition(pos.X, pos.Y);
-        }
-
         public abstract void Draw(Graphics graphics);
-        public abstract void Update();
+        public abstract void Update(float totalSeconds);
     }
 }

@@ -20,11 +20,10 @@ namespace Lesson2.Scenes
             var rnd = new Random();
 
             var random = new Random();
-            for (var i = 0; i < 30; i++)
+            for (var i = 0; i < 100; i++)
             {
-                int r = rnd.Next(5, 50);
-                var position = new Point(Drawer.Width, rnd.Next(0, Drawer.Height));
-                var direction = new Point(-r, 0);
+                var position = new Point(rnd.Next(0, Drawer.Width), rnd.Next(0, Drawer.Height));
+                var direction = new Point(-rnd.Next(50, 500), 0);
                 var size = new Size(3, 3);
                 
                 var type = random.Next(2) % 2 == 0 ? typeof(Star) : typeof(XStar);
@@ -32,13 +31,13 @@ namespace Lesson2.Scenes
                 _stars.Add((GameObjects)Activator.CreateInstance(type, position, direction, size));
             }
 
-            _bullet = new Bullet(new Point(0, rnd.Next(0, Drawer.Height)), new Point(5, 0), new Size(4, 1));
+            _bullet = new Bullet(new Point(0, rnd.Next(0, Drawer.Height)), new Point(500, 0), new Size(4, 1));
 
             for (var i = 0; i < 3; i++)
             {
-                int r = rnd.Next(5, 50);
                 var position = new Point(Drawer.Width, rnd.Next(0, Drawer.Height));
-                var direction = new Point(-r / 5, 0);
+                var direction = new Point(-rnd.Next(50, 500), 0);
+                var r = rnd.Next(5, 50);
                 var size = new Size(r, r);
                 _asteroids.Add(new Asteroid(position, direction, size));
             }
@@ -53,19 +52,17 @@ namespace Lesson2.Scenes
             _toUpdate.AddRange(_asteroids);
         }
 
-        public override void Update()
+        public override void Update(float totalSeconds)
         {
-            foreach (var obj in _toUpdate)
-            {
-                obj.Update();
-            }
+
+            base.Update(totalSeconds);
 
             foreach (var asteroid in _asteroids)
             {
                 asteroid.Collision(_bullet);
             }
 
-            _bullet.Update();
+            _bullet.Update(totalSeconds);
 
             _asteroids.RemoveAll(asteroid => asteroid.IsDead);
         }

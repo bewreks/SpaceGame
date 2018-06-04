@@ -34,9 +34,9 @@ namespace Lesson2.Drawables
             graphics.FillPolygon(Brushes.Wheat, _points);
         }
 
-        public override void Update()
+        public override void Update(float totalSeconds)
         {
-            _position.X = _position.X + _dir.X;
+            _position.X = _position.X + _dir.X * totalSeconds;
             if (_position.X < 0) _position.X = Drawer.Width + _size.Width;
             
             for (var i = 0; i < _basePoints.Length; i++)

@@ -21,7 +21,7 @@ namespace Lesson2.Drawables
             graphics.DrawString(_text, _font, _brush, _position);
         }
 
-        public override void Update()
+        public override void Update(float totalSeconds)
         {
             
         }
