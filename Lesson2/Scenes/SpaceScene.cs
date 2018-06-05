@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
 
@@ -17,27 +15,16 @@ namespace Lesson2.Scenes
             _stars.Clear();
             _asteroids.Clear();
 
-            var rnd = new Random();
             for (var i = 0; i < 100; i++)
             {
-                var position = new Point(rnd.Next(0, Drawer.Width), rnd.Next(0, Drawer.Height));
-                var direction = new Point(-rnd.Next(50, 500), 0);
-                var size = new Size(3, 3);
-                
-                var type = rnd.Next(2) % 2 == 0 ? typeof(Star) : typeof(XStar);
-                
-                _stars.Add((GameObjects)Activator.CreateInstance(type, position, direction, size));
+                _stars.Add(GameObjectsFactory.CreateStar());
             }
 
-            _bullet = new Bullet(new Point(0, rnd.Next(0, Drawer.Height)), new Point(500, 0), new Size(4, 1));
+            _bullet = GameObjectsFactory.CreateBullet();
 
             for (var i = 0; i < 3; i++)
             {
-                var position = new Point(Drawer.Width, rnd.Next(0, Drawer.Height));
-                var direction = new Point(-rnd.Next(50, 500), 0);
-                var r = rnd.Next(5, 50);
-                var size = new Size(r, r);
-                _asteroids.Add(new Asteroid(position, direction, size));
+                _asteroids.Add(GameObjectsFactory.CreateAsteroid());
             }
 
             AddDrawable(_stars);

@@ -53,6 +53,7 @@
     <Compile Include="Drawables\XStar.cs" />
     <Compile Include="Drawer.cs" />
     <Compile Include="GameForm.cs" />
+    <Compile Include="GameObjectsFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\Scene.cs" />
