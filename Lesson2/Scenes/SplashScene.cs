@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using Lesson2.Drawables;
 using Lesson2.Scenes;
 
@@ -6,20 +7,24 @@ namespace Lesson2
 {
     public class SplashScene : Scene
     {
+        private const float FadeInTime = 2;
+        private const float FadeOutTime = 2;
+        private const float WaitingTime = 5;
+        
         private float alpha;
         private float wait;
         private Function _action;
 
         private delegate void Function(float totalSeconds);
 
-        public override void Load()
+        protected override void OnLoad()
         {
             alpha = 255;
             wait = 0;
             
-            _toDraw.Add(new TextBox(new Point(230, 200), "Space Game", new Font("Arial", 40), Brushes.White));
-            _toDraw.Add(new TextBox(new Point(570, 540), "Соколовский Дмитрий", new Font("Arial", 14), Brushes.White));
-
+            AddDrawable(new TextBox(new Point(230, 200), "Space Game", new Font("Arial", 40), Brushes.White));
+            AddDrawable(new TextBox(new Point(570, 540), "Соколовский Дмитрий", new Font("Arial", 14), Brushes.White));
+ 
             _action = FadeOut;
         }
 
@@ -40,9 +45,11 @@ namespace Lesson2
 
         private void FadeIn(float totalSeconds)
         {
-            alpha += 200 * totalSeconds;
-            if (alpha >= 255)
+            wait += totalSeconds;
+            alpha = 255 * (1/FadeInTime) * wait;
+            if (wait >= FadeInTime)
             {
+                wait = 0;
                 _action = null;
                 Drawer.SetScene(new SpaceScene());
             }
@@ -50,9 +57,11 @@ namespace Lesson2
 
         private void FadeOut(float totalSeconds)
         {
-            alpha -= 200 * totalSeconds;
-            if (alpha <= 0)
+            wait += totalSeconds;
+            alpha = 255 * (1/FadeOutTime) * (FadeOutTime - wait);
+            if (wait >= FadeOutTime)
             {
+                wait = 0;
                 _action = Wait;
             }
         }
@@ -60,8 +69,9 @@ namespace Lesson2
         private void Wait(float totalSeconds)
         {
             wait += totalSeconds;
-            if (wait >= 5)
+            if (wait >= WaitingTime)
             {
+                wait = 0;
                 _action = FadeIn;
             }
         }

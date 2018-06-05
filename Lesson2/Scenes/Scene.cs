@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using Lesson2.Drawables.BaseObjects;
 
 namespace Lesson2.Scenes
@@ -9,9 +10,13 @@ namespace Lesson2.Scenes
     {
         // Отдельные списки для рисовки и обновления
         // Ведь нет смысла обновлять то, что не должно обновляться
-        protected List<IDrawable> _toDraw;
-        protected List<IUpdatable> _toUpdate;
+        // Заполняются только во время загрузки
+        private List<IDrawable> _toDraw;
+        private List<IUpdatable> _toUpdate;
 
+        private bool _loaded;
+
+        // FPS
         private uint _count;
         private float _seconds;
         private DateTime _dateTime;
@@ -21,6 +26,7 @@ namespace Lesson2.Scenes
             _count = 0;
             _seconds = 0;
             _dateTime = DateTime.Now;
+            _loaded = false;
 
             _toDraw = new List<IDrawable>();
             _toUpdate = new List<IUpdatable>();
@@ -30,7 +36,12 @@ namespace Lesson2.Scenes
         // переопределить метод и обновлять данные как ему надо
         public virtual void Update(float totalSeconds)
         {
-            foreach (var updatable in _toUpdate)
+            if (!_loaded)
+            {
+                return;
+            }
+            
+            foreach (var updatable in _toUpdate.ToArray())
             {
                 updatable.Update(totalSeconds);
             }
@@ -39,6 +50,74 @@ namespace Lesson2.Scenes
         // Перебераем весь список, но оставляем пользователю возможность
         // переопределить метод и рисовать как ему надо
         public virtual void Draw(Graphics graphics)
+        {
+            if (!_loaded)
+            {
+                return;
+            }
+
+            // Пока не знаю как правильно блокировать вне потока
+            // поэтому изменение вместо коллекции отправляю массив из этой коллекции
+            foreach (var drawable in _toDraw.ToArray())
+            {
+                drawable.Draw(graphics);
+            }
+        }
+
+        // Нельзя вызывать Load дважды
+        // Остальные методы, кроме добавления, не отработают, пока загрузка не будет завершена
+        public void Load()
+        {
+            if (_loaded)
+            {
+                return;
+            }
+            
+            _toDraw.Clear();
+            _toUpdate.Clear();
+            
+            OnLoad();
+            
+            _loaded = true;
+        }
+
+        protected void AddUpdatable(IUpdatable updatable)
+        {
+            if (_loaded)
+            {
+                return;
+            }
+            _toUpdate.Add(updatable);
+        }
+
+        protected void AddUpdatable(IEnumerable<IUpdatable> collection)
+        {
+            if (_loaded)
+            {
+                return;
+            }
+            _toUpdate.AddRange(collection);
+        }
+
+        protected void AddDrawable(IDrawable updatable)
+        {
+            if (_loaded)
+            {
+                return;
+            }
+            _toDraw.Add(updatable);
+        }
+
+        protected void AddDrawable(IEnumerable<IDrawable> collection)
+        {
+            if (_loaded)
+            {
+                return;
+            }
+            _toDraw.AddRange(collection);
+        }
+
+        private void FPSCalc()
         {
             var dateTime = DateTime.Now;
             _seconds += (float)(dateTime - _dateTime).TotalSeconds;
@@ -52,14 +131,9 @@ namespace Lesson2.Scenes
                 _seconds = 0;
                 _count = 0;
             }
-
-            foreach (var drawable in _toDraw)
-            {
-                drawable.Draw(graphics);
-            }
         }
-
+        
         // Метод создания объектов сцены
-        public abstract void Load();
+        protected abstract void OnLoad();
     }
 }

@@ -33,12 +33,6 @@
           <e p="SpaceScene.cs" t="Include" />
           <e p="SplashScene.cs" t="Include" />
         </e>
-        <e p="Work" t="Include">
-          <e p="HourWorker.cs" t="Include" />
-          <e p="MonthWorker.cs" t="Include" />
-          <e p="Worker.cs" t="Include" />
-          <e p="Workers.cs" t="Include" />
-        </e>
       </e>
       <e p="Lesson2.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

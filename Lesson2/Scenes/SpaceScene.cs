@@ -12,7 +12,7 @@ namespace Lesson2.Scenes
         private Bullet _bullet;
         private List<Asteroid> _asteroids = new List<Asteroid>();
 
-        public override void Load()
+        protected  override void OnLoad()
         {
             _stars.Clear();
             _asteroids.Clear();
@@ -42,14 +42,12 @@ namespace Lesson2.Scenes
                 _asteroids.Add(new Asteroid(position, direction, size));
             }
 
-            _toDraw.Clear();
-            _toDraw.AddRange(_stars);
-            _toDraw.AddRange(_asteroids);
-            _toDraw.Add(_bullet);
+            AddDrawable(_stars);
+            AddDrawable(_asteroids);
+            AddDrawable(_bullet);
 
-            _toUpdate.Clear();
-            _toUpdate.AddRange(_stars);
-            _toUpdate.AddRange(_asteroids);
+            AddUpdatable(_stars);
+            AddUpdatable(_asteroids);
         }
 
         public override void Update(float totalSeconds)

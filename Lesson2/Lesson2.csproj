@@ -58,10 +58,6 @@
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Scenes\SpaceScene.cs" />
     <Compile Include="Scenes\SplashScene.cs" />
-    <Compile Include="Work\HourWorker.cs" />
-    <Compile Include="Work\MonthWorker.cs" />
-    <Compile Include="Work\Worker.cs" />
-    <Compile Include="Work\Workers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
