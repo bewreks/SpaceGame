@@ -1,48 +1,58 @@
 ﻿using System.Drawing;
+using System.Drawing.Drawing2D;
 using Lesson2.Drawables.BaseObjects;
 
 namespace Lesson2.Drawables
 {
     public class Star : GameObjects
     {
-        private PointF[] _basePoints;
-        private PointF[] _points;
-
         private float _scale = 1;
+        private GraphicsPath _graphicsPath;
 
         public Star(Point position, Point direction, Size size) : base(position, direction, size)
         {
             _scale = _size.Width / 3.0f;
 
-            _basePoints = new PointF[10];
-            _basePoints[0] = new PointF(0, -3);
-            _basePoints[1] = new PointF(5 / 6.0f, -1);
-            _basePoints[2] = new PointF(3, -1);
-            _basePoints[3] = new PointF(49 / 38.0f, 7 / 19.0f);
-            _basePoints[4] = new PointF(2, 3);
-            _basePoints[5] = new PointF(0, 7 / 5.0f);
-            _basePoints[6] = new PointF(-2, 3);
-            _basePoints[7] = new PointF(-22 / 16.0f, 9 / 19.0f);
-            _basePoints[8] = new PointF(-3, -1);
-            _basePoints[9] = new PointF(-2 / 3.0f, -1);
-
-            _points = new PointF[_basePoints.Length];
+            _graphicsPath = new GraphicsPath();
+            _graphicsPath.AddLine(0, 3, 2, -3);
+            _graphicsPath.AddLine(2, -3, -3, 1);
+            _graphicsPath.AddLine(-3, 1, 3, 1);
+            _graphicsPath.AddLine(3, 1, -2, -3);
+            _graphicsPath.AddLine(-2, -3, 0, 3);
+            
+            var matrix = new Matrix();
+            matrix.Translate(_position.X, _position.Y);
+            matrix.Scale(_scale, -_scale);
+            _graphicsPath.Transform(matrix);
+            _graphicsPath.FillMode = FillMode.Winding;
         }
 
         public override void Draw(Graphics graphics)
         {
-            graphics.FillPolygon(Brushes.Wheat, _points);
+
+            lock (_graphicsPath)
+            {
+                graphics.FillPath(Brushes.Wheat, _graphicsPath);
+            }
         }
 
         public override void Update(float totalSeconds)
         {
-            _position.X = _position.X + _dir.X * totalSeconds;
-            if (_position.X < 0) _position.X = Drawer.Width + _size.Width;
-            
-            for (var i = 0; i < _basePoints.Length; i++)
+            lock (_graphicsPath)
             {
-                _points[i] = new PointF(_basePoints[i].X * _scale + _position.X,
-                    _basePoints[i].Y * _scale + _position.Y);
+                var matrix = new Matrix();
+                _position.X = _position.X + _dir.X * totalSeconds;
+                if (_position.X < 0)
+                {
+                    _position.X = Drawer.Width + _size.Width;
+                    matrix.Translate(Drawer.Width + _size.Width, _dir.Y * totalSeconds);
+                }
+                else
+                {
+                    matrix.Translate(_dir.X * totalSeconds, _dir.Y * totalSeconds);
+                }
+                
+                _graphicsPath.Transform(matrix);
             }
         }
     }

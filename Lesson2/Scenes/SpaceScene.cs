@@ -18,15 +18,13 @@ namespace Lesson2.Scenes
             _asteroids.Clear();
 
             var rnd = new Random();
-
-            var random = new Random();
             for (var i = 0; i < 100; i++)
             {
                 var position = new Point(rnd.Next(0, Drawer.Width), rnd.Next(0, Drawer.Height));
                 var direction = new Point(-rnd.Next(50, 500), 0);
                 var size = new Size(3, 3);
                 
-                var type = random.Next(2) % 2 == 0 ? typeof(Star) : typeof(XStar);
+                var type = rnd.Next(2) % 2 == 0 ? typeof(Star) : typeof(XStar);
                 
                 _stars.Add((GameObjects)Activator.CreateInstance(type, position, direction, size));
             }
