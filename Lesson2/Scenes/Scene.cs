@@ -21,6 +21,8 @@ namespace Lesson2.Scenes
         private float _seconds;
         private DateTime _dateTime;
 
+        public bool Loaded => _loaded;
+
         protected Scene()
         {
             _count = 0;

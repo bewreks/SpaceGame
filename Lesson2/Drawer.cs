@@ -50,6 +50,11 @@ namespace Lesson2
             _scene.Load();
         }
 
+        public static void SetLoadedScene(Scene scene)
+        {
+            _scene = scene;
+        }
+
         public static void Init(Form form)
         {
             var g = form.CreateGraphics();

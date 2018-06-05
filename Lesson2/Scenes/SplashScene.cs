@@ -15,6 +15,8 @@ namespace Lesson2
         private float wait;
         private Function _action;
 
+        private Scene _nextScene;
+
         private delegate void Function(float totalSeconds);
 
         protected override void OnLoad()
@@ -51,7 +53,7 @@ namespace Lesson2
             {
                 wait = 0;
                 _action = null;
-                Drawer.SetScene(new SpaceScene());
+                Drawer.SetLoadedScene(_nextScene);
             }
         }
 
@@ -63,13 +65,16 @@ namespace Lesson2
             {
                 wait = 0;
                 _action = Wait;
+                _nextScene = new SpaceScene();
+                _nextScene.Load();
             }
         }
 
+        // Не меньше 5-ти секунд показывать сплеш
         private void Wait(float totalSeconds)
         {
             wait += totalSeconds;
-            if (wait >= WaitingTime)
+            if (wait >= WaitingTime && _nextScene.Loaded)
             {
                 wait = 0;
                 _action = FadeIn;
