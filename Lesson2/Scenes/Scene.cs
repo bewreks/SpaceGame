@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Lesson2.Drawables.BaseObjects;
+using Lesson2.Loggers;
 
 namespace Lesson2.Scenes
 {
@@ -74,48 +75,35 @@ namespace Lesson2.Scenes
             {
                 return;
             }
+            var dateTime = DateTime.Now;
             
             _toDraw.Clear();
             _toUpdate.Clear();
             
             OnLoad();
-            
+
+            Logger.Print("Scene loaded with {0:f3} seconds", (DateTime.Now - dateTime).TotalSeconds);
+
             _loaded = true;
         }
 
         protected void AddUpdatable(IUpdatable updatable)
         {
-            if (_loaded)
-            {
-                return;
-            }
             _toUpdate.Add(updatable);
         }
 
         protected void AddUpdatable(IEnumerable<IUpdatable> collection)
         {
-            if (_loaded)
-            {
-                return;
-            }
             _toUpdate.AddRange(collection);
         }
 
         protected void AddDrawable(IDrawable updatable)
         {
-            if (_loaded)
-            {
-                return;
-            }
             _toDraw.Add(updatable);
         }
 
         protected void AddDrawable(IEnumerable<IDrawable> collection)
         {
-            if (_loaded)
-            {
-                return;
-            }
             _toDraw.AddRange(collection);
         }
 

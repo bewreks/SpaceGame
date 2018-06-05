@@ -1,6 +1,6 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using Lesson2.Drawables;
+using Lesson2.Loggers;
 using Lesson2.Scenes;
 
 namespace Lesson2
@@ -21,6 +21,8 @@ namespace Lesson2
 
         protected override void OnLoad()
         {
+            Logger.Print("Splash scene start load");
+
             alpha = 255;
             wait = 0;
             
@@ -67,6 +69,7 @@ namespace Lesson2
                 _action = Wait;
                 _nextScene = new SpaceScene();
                 _nextScene.Load();
+                Logger.Print("Waiting load main scene");
             }
         }
 
@@ -78,6 +81,7 @@ namespace Lesson2
             {
                 wait = 0;
                 _action = FadeIn;
+                Logger.Print("Main scene loaded");
             }
         }
     }

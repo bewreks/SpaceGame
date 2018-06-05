@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
+using Lesson2.Loggers;
 
 namespace Lesson2.Scenes
 {
@@ -10,8 +11,10 @@ namespace Lesson2.Scenes
         private Bullet _bullet;
         private List<Asteroid> _asteroids = new List<Asteroid>();
 
-        protected  override void OnLoad()
+        protected override void OnLoad()
         {
+            Logger.Print("Space scene start load");
+
             _stars.Clear();
             _asteroids.Clear();
 
@@ -19,6 +22,8 @@ namespace Lesson2.Scenes
             {
                 _stars.Add(GameObjectsFactory.CreateStar());
             }
+            
+            Logger.Print("Created {0} stars", _stars.Count);
 
             _bullet = GameObjectsFactory.CreateBullet();
 
@@ -37,7 +42,6 @@ namespace Lesson2.Scenes
 
         public override void Update(float totalSeconds)
         {
-
             base.Update(totalSeconds);
 
             foreach (var asteroid in _asteroids)

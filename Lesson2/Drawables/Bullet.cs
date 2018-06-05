@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using Lesson2.Drawables.BaseObjects;
+using Lesson2.Loggers;
 
 namespace Lesson2.Drawables
 {
@@ -28,6 +29,7 @@ namespace Lesson2.Drawables
 
         public override void OnCollision()
         {
+            Logger.Print("Bullet collision");
             System.Media.SystemSounds.Hand.Play();
             Reset();
         }
