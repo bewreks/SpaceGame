@@ -16,11 +16,18 @@
             <e p="IUpdatable.cs" t="Include" />
           </e>
           <e p="Bullet.cs" t="Include" />
+          <e p="SpaceShip.cs" t="Include" />
           <e p="Star.cs" t="Include" />
           <e p="TextBox.cs" t="Include" />
           <e p="XStar.cs" t="Include" />
         </e>
         <e p="Drawer.cs" t="Include" />
+        <e p="Events" t="Include">
+          <e p="EventManager.cs" t="Include" />
+          <e p="GameEventArgs.cs" t="Include" />
+          <e p="IEventArgs.cs" t="Include" />
+          <e p="MouseMoveGameEvent.cs" t="Include" />
+        </e>
         <e p="GameForm.cs" t="Include" />
         <e p="GameObjectsFactory.cs" t="Include" />
         <e p="Lesson2.csproj" t="IncludeRecursive" />
