@@ -112,8 +112,8 @@ namespace Lesson2
         private void Start(object sender, EventArgs e)
         {
             Logger.Print("Form shown");
-//            Drawer.SetScene(new SplashScene());
-            Drawer.SetScene(new SpaceScene());
+            Drawer.SetScene(new SplashScene());
+//            Drawer.SetScene(new SpaceScene());
 //            _updateThread.Start();
 //            _drawThread.Start();
 
