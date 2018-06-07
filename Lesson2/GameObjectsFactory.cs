@@ -21,9 +21,9 @@ namespace Lesson2
             return (GameObjects) Activator.CreateInstance(type, position, direction, size);
         }
 
-        public static Bullet CreateBullet()
+        public static Bullet CreateBullet(PointF position)
         {
-            return new Bullet(new Point(0, rnd.Next(0, Drawer.Height)), new Point(500, 0), new Size(4, 1));
+            return new Bullet(new Point((int) position.X, (int) position.Y), new Point(500, 0), new Size(4, 1));
         }
 
         public static Asteroid CreateAsteroid()

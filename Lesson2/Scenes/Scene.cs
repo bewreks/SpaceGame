@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 using Lesson2.Drawables.BaseObjects;
 using Lesson2.Loggers;
 
@@ -12,8 +12,8 @@ namespace Lesson2.Scenes
         // Отдельные списки для рисовки и обновления
         // Ведь нет смысла обновлять то, что не должно обновляться
         // Заполняются только во время загрузки
-        private List<IDrawable> _toDraw;
-        private List<IUpdatable> _toUpdate;
+        private ThreadList<IUpdatable> _toUpdate;
+        private ThreadList<IDrawable> _toDraw;
 
         private bool _loaded;
 
@@ -31,8 +31,10 @@ namespace Lesson2.Scenes
             _dateTime = DateTime.Now;
             _loaded = false;
 
-            _toDraw = new List<IDrawable>();
-            _toUpdate = new List<IUpdatable>();
+            _toUpdate = new ThreadList<IUpdatable>();
+            
+            _toDraw = new ThreadList<IDrawable>();
+            
         }
 
         // Перебераем весь список, но оставляем пользователю возможность
@@ -43,10 +45,17 @@ namespace Lesson2.Scenes
             {
                 return;
             }
-            
-            foreach (var updatable in _toUpdate.ToArray())
+
+
+            _toUpdate.RemoveAll(DeleteIfDead);
+            try
             {
-                updatable.Update(totalSeconds);
+                _toUpdate.ForEach(updatable => updatable.Update(totalSeconds));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
             }
         }
 
@@ -61,9 +70,15 @@ namespace Lesson2.Scenes
 
             // Пока не знаю как правильно блокировать вне потока
             // поэтому изменение вместо коллекции отправляю массив из этой коллекции
-            foreach (var drawable in _toDraw.ToArray())
+            _toDraw.RemoveAll(DeleteIfDead);
+            try
             {
-                drawable.Draw(graphics);
+                _toDraw.ForEach(drawable => drawable.Draw(graphics));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
             }
         }
 
@@ -75,11 +90,12 @@ namespace Lesson2.Scenes
             {
                 return;
             }
+
             var dateTime = DateTime.Now;
-            
+
             _toDraw.Clear();
             _toUpdate.Clear();
-            
+
             OnLoad();
 
             Logger.Print("Scene loaded with {0:f3} seconds", (DateTime.Now - dateTime).TotalSeconds);
@@ -94,25 +110,30 @@ namespace Lesson2.Scenes
 
         protected void AddUpdatable(IEnumerable<IUpdatable> collection)
         {
-            _toUpdate.AddRange(collection);
+            _toUpdate.Add(collection);
         }
 
-        protected void AddDrawable(IDrawable updatable)
+        protected void AddDrawable(IDrawable drawable)
         {
-            _toDraw.Add(updatable);
+            _toDraw.Add(drawable);
         }
 
         protected void AddDrawable(IEnumerable<IDrawable> collection)
         {
-            _toDraw.AddRange(collection);
+            _toDraw.Add(collection);
+        }
+
+        protected void RemoveDrawable(IDrawable drawable)
+        {
+            _toDraw.Remove(drawable);
         }
 
         private void FPSCalc()
         {
             var dateTime = DateTime.Now;
-            _seconds += (float)(dateTime - _dateTime).TotalSeconds;
+            _seconds += (float) (dateTime - _dateTime).TotalSeconds;
             _dateTime = dateTime;
-            
+
             _count++;
 
             if (_seconds >= 1)
@@ -122,7 +143,17 @@ namespace Lesson2.Scenes
                 _count = 0;
             }
         }
-        
+
+        private bool DeleteIfDead(IDrawable drawable)
+        {
+            return drawable is IKillable && (drawable as IKillable).IsDead;
+        }
+
+        private bool DeleteIfDead(IUpdatable updatable)
+        {
+            return updatable is IKillable && (updatable as IKillable).IsDead;
+        }
+
         // Метод создания объектов сцены
         protected abstract void OnLoad();
     }

@@ -13,6 +13,7 @@
             <e p="GameObjects.cs" t="Include" />
             <e p="ICollision.cs" t="Include" />
             <e p="IDrawable.cs" t="Include" />
+            <e p="IKillable.cs" t="Include" />
             <e p="IUpdatable.cs" t="Include" />
           </e>
           <e p="Bullet.cs" t="Include" />
@@ -30,6 +31,7 @@
         </e>
         <e p="GameForm.cs" t="Include" />
         <e p="GameObjectsFactory.cs" t="Include" />
+        <e p="IThreadList.cs" t="Include" />
         <e p="Lesson2.csproj" t="IncludeRecursive" />
         <e p="Loggers" t="Include">
           <e p="ConsoleLogger.cs" t="Include" />
@@ -46,6 +48,7 @@
           <e p="SpaceScene.cs" t="Include" />
           <e p="SplashScene.cs" t="Include" />
         </e>
+        <e p="ThreadList.cs" t="Include" />
       </e>
       <e p="Lesson2.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

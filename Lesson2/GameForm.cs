@@ -12,6 +12,8 @@ namespace Lesson2
     {
         private Thread _updateThread;
         private Thread _drawThread;
+        
+        private Thread _gameThread;
 
         public GameForm()
         {
@@ -32,15 +34,32 @@ namespace Lesson2
             // Запуск потоков на Update + отрисовку
             _updateThread = new Thread(Drawer.Update);
             _drawThread = new Thread(Drawer.Draw);
+            
+            _gameThread = new Thread(Game);
 
             Shown += Start;
             Closed += End;
             KeyDown += OnKeyDown;
             MouseMove += OnMouseMove;
+            MouseClick += OnMouseClick;
 
             // Инициализация класса отрисовки
             // В целом бесполезен, но так красивее и правильнее
             Drawer.Init(this);
+        }
+
+        private void Game()
+        {
+            while (true)
+            {
+                Drawer.Update();
+                Drawer.Draw();
+            }
+        }
+
+        private void OnMouseClick(object sender, MouseEventArgs e)
+        {
+            EventManager.DispatchEvent(EventManager.Events.ShootEvent);
         }
 
         private void OnMouseMove(object sender, MouseEventArgs e)
@@ -68,8 +87,10 @@ namespace Lesson2
         private void End(object sender, EventArgs e)
         {
             Logger.Print("Form closed");
-            _drawThread.Abort();
-            _updateThread.Abort();
+//            _drawThread.Abort();
+//            _updateThread.Abort();
+            
+            _gameThread.Abort();
         }
 
         private void Start(object sender, EventArgs e)
@@ -77,8 +98,10 @@ namespace Lesson2
             Logger.Print("Form shown");
 //            Drawer.SetScene(new SplashScene());
             Drawer.SetScene(new SpaceScene());
-            _updateThread.Start();
-            _drawThread.Start();
+//            _updateThread.Start();
+//            _drawThread.Start();
+            
+            _gameThread.Start();
         }
     }
 }

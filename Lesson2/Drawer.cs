@@ -68,8 +68,9 @@ namespace Lesson2
         // Очитить, отрисовать сцену, если есть, отрендерить
         public static void Draw()
         {
-            while (true)
+//            while (true)
             {
+                //Нужно блокировать Graphics для все объектов
                 _buffer.Graphics.Clear(Color.Black);
 
                 _scene?.Draw(_buffer.Graphics);
@@ -80,7 +81,7 @@ namespace Lesson2
 
         public static void Update()
         {
-            while (true)
+//            while (true)
             {
                 var dateTime = DateTime.Now;
                 _scene?.Update((float) (dateTime - _dateTime).TotalSeconds);

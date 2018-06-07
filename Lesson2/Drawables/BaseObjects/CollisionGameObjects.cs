@@ -4,7 +4,7 @@ namespace Lesson2.Drawables.BaseObjects
 {
     
     // Класс для игровых объектов с коллизией
-    public abstract class CollisionGameObjects : GameObjects, ICollision
+    public abstract class CollisionGameObjects : GameObjects, ICollision, IKillable
     {
         public Rectangle Rect => new Rectangle(new Point((int) _position.X, (int) _position.Y), _size);
 
@@ -23,5 +23,6 @@ namespace Lesson2.Drawables.BaseObjects
         // Метод, который вызовется у обоих объектов при коллизии
         public abstract void OnCollision();
 
+        public bool IsDead => false;
     }
 }

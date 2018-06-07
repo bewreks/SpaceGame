@@ -6,12 +6,28 @@ namespace Lesson2.Loggers
     {
         public void Print(string message)
         {
-            Console.WriteLine(message);
+            Console.WriteLine("[LOG] " + message);
         }
 
         public void Print(string message, params object[] args)
         {
-            Console.WriteLine(message, args);
+            Console.WriteLine("[LOG] " + message, args);
+        }
+
+        public void ErrorPrint(string message)
+        {
+            var foregroundColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("[ERROR] " +message);
+            Console.ForegroundColor = foregroundColor;
+        }
+
+        public void ErrorPrint(string message, params object[] args)
+        {
+            var foregroundColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("[ERROR] \r\n" + message, args);
+            Console.ForegroundColor = foregroundColor;
         }
     }
 }
