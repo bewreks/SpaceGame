@@ -4,6 +4,8 @@ namespace Lesson2
 {
     public class Program
     {
+        delegate T GenericDelegate<T>(T first, T second);
+
         public static void Main(string[] args)
         {
             /*
@@ -28,11 +30,27 @@ namespace Lesson2
             /* Четвертое задание:
              * Добавить подсчет очков за сбитые астероиды
              */
+            Application.Run(new GameForm());
 
             /* Пятое задание:
              * Добавить в пример Lesson3 обобщенный делегат
+             * 
+             * Так и не придумал где его в игре можно использовать
              */
-            Application.Run(new GameForm());
+            GenericDelegate<int> delegateTest = Sum;
+            delegateTest(5, 6);
+            delegateTest = Sub;
+            delegateTest(5, 6);
+        }
+
+        private static int Sum(int first, int second)
+        {
+            return first + second;
+        }
+
+        private static int Sub(int first, int second)
+        {
+            return first - second;
         }
     }
 }
