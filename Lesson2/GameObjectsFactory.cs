@@ -39,5 +39,13 @@ namespace Lesson2
         {
             return new SpaceShip(new Point(0, 0), new Point(0, 5), new Size(50, 45));
         }
+
+        public static Medic CreateMedic()
+        {
+            var position = new Point(Drawer.Width, rnd.Next(0, Drawer.Height));
+            var direction = new Point(-200, 0);
+            var size = new Size(10, 10);
+            return new Medic(position, direction, size);
+        }
     }
 }

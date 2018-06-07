@@ -49,6 +49,7 @@
     <Compile Include="Drawables\BaseObjects\IKillable.cs" />
     <Compile Include="Drawables\BaseObjects\IUpdatable.cs" />
     <Compile Include="Drawables\Bullet.cs" />
+    <Compile Include="Drawables\Medic.cs" />
     <Compile Include="Drawables\SpaceShip.cs" />
     <Compile Include="Drawables\Star.cs" />
     <Compile Include="Drawables\TextBox.cs" />
@@ -60,7 +61,6 @@
     <Compile Include="Events\MouseMoveGameEvent.cs" />
     <Compile Include="GameForm.cs" />
     <Compile Include="GameObjectsFactory.cs" />
-    <Compile Include="IThreadList.cs" />
     <Compile Include="Loggers\ConsoleLogger.cs" />
     <Compile Include="Loggers\ILogger.cs" />
     <Compile Include="Loggers\Logger.cs" />
@@ -69,7 +69,8 @@
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Scenes\SpaceScene.cs" />
     <Compile Include="Scenes\SplashScene.cs" />
-    <Compile Include="ThreadList.cs" />
+    <Compile Include="Threads\IThreadList.cs" />
+    <Compile Include="Threads\ThreadList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

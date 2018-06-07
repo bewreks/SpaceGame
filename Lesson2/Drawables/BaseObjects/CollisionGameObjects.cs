@@ -11,17 +11,21 @@ namespace Lesson2.Drawables.BaseObjects
         protected CollisionGameObjects(Point position, Point dir, Size size) : base(position, dir, size){}
         public bool Collision(ICollision obj)
         {
+            if (IsDead)
+            {
+                return false;
+            }
             var intersectsWith = obj.Rect.IntersectsWith(Rect);
             if (intersectsWith)
             {
-                OnCollision();
-                obj.OnCollision();
+                OnCollision(obj);
+                obj.OnCollision(this);
             }
             return intersectsWith;
         }
         
         // Метод, который вызовется у обоих объектов при коллизии
-        public abstract void OnCollision();
+        public abstract void OnCollision(ICollision obj);
 
         public bool IsDead => false;
     }

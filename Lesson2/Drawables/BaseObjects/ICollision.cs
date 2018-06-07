@@ -5,7 +5,7 @@ namespace Lesson2.Drawables.BaseObjects
     public interface ICollision
     {
         bool Collision(ICollision obj);
-        void OnCollision();
+        void OnCollision(ICollision obj);
         Rectangle Rect { get; }
 
     }

@@ -34,12 +34,13 @@ namespace Lesson2.Drawables
             }
         }
 
-        public override void OnCollision()
+        public override void OnCollision(ICollision obj)
         {
             if (_isDead)return;
-            Logger.Print("Bullet collision");
-            System.Media.SystemSounds.Hand.Play();
-            Reset();
+            if (obj is Asteroid)
+            {
+                System.Media.SystemSounds.Hand.Play();
+            }
         }
 
         private void Reset()

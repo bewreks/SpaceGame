@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
 
 namespace Lesson2.Scenes
@@ -12,6 +13,8 @@ namespace Lesson2.Scenes
         private float _scaleY;
 
         private MouseMoveGameEvent _prEventArgs;
+        
+        public int Enegry { get; set; }
 
         public SpaceShip(Point position, Point dir, Size size) : base(position, dir, size)
         {
@@ -31,6 +34,8 @@ namespace Lesson2.Scenes
             EventManager.AddEventListener(EventManager.Events.UpEvent, Up);
             EventManager.AddEventListener(EventManager.Events.DownEvent, Down);
             EventManager.AddEventListener(EventManager.Events.MoveEvent, Move);
+
+            Enegry = 100;
         }
 
         private void Move(IEventArgs args)
@@ -87,7 +92,7 @@ namespace Lesson2.Scenes
         {
             lock (_graphicsPath)
             {
-                graphics.FillPath(Brushes.Wheat, _graphicsPath);
+                graphics.FillPath(Brushes.Silver, _graphicsPath);
             }
         }
 
@@ -96,8 +101,17 @@ namespace Lesson2.Scenes
         }
 
 
-        public override void OnCollision()
+        public override void OnCollision(ICollision obj)
         {
+            if (obj is Asteroid)
+            {
+                Enegry -= (obj as Asteroid).Energy;
+            }
+
+            if (obj is Medic)
+            {
+                Enegry += (obj as Medic).Energy;
+            }
         }
 
         public PointF GetPoint()

@@ -10,9 +10,11 @@ namespace Lesson2.Drawables
         private bool _isDead;
 
         public bool IsDead => _isDead;
-        
+        public int Energy { get; set; }
+
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
+            Energy = 5;
             _isDead = false;
         }
 
@@ -31,9 +33,8 @@ namespace Lesson2.Drawables
             if (_position.X < 0) Reset();
         }
 
-        public override void OnCollision()
+        public override void OnCollision(ICollision obj)
         {
-            Logger.Print("Asteroid collision");
             _isDead = true;
         }
 

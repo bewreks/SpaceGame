@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Lesson2.Loggers;
 using Lesson2.Scenes;
 
 namespace Lesson2
@@ -8,16 +9,17 @@ namespace Lesson2
     public static class Drawer
     {
         private static Scene _scene;
-        
+
         private static BufferedGraphicsContext _context;
         private static BufferedGraphics _buffer;
-        
+
         private static int _width;
         private static int _height;
-        
+
         private static DateTime _dateTime;
 
-        public static int Width {
+        public static int Width
+        {
             get => _width;
             set
             {
@@ -25,6 +27,7 @@ namespace Lesson2
                 {
                     throw new ArgumentOutOfRangeException();
                 }
+
                 _width = value;
             }
         }
@@ -38,6 +41,7 @@ namespace Lesson2
                 {
                     throw new ArgumentOutOfRangeException();
                 }
+
                 _height = value;
             }
         }
@@ -64,11 +68,11 @@ namespace Lesson2
             _buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
             _dateTime = DateTime.Now;
         }
-        
+
         // Очитить, отрисовать сцену, если есть, отрендерить
         public static void Draw()
         {
-//            while (true)
+            try
             {
                 //Нужно блокировать Graphics для все объектов
                 _buffer.Graphics.Clear(Color.Black);
@@ -77,15 +81,27 @@ namespace Lesson2
 
                 _buffer.Render();
             }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
+            }
         }
 
         public static void Update()
         {
-//            while (true)
+            try
             {
-                var dateTime = DateTime.Now;
-                _scene?.Update((float) (dateTime - _dateTime).TotalSeconds);
-                _dateTime = dateTime;
+                {
+                    var dateTime = DateTime.Now;
+                    _scene?.Update((float) (dateTime - _dateTime).TotalSeconds);
+                    _dateTime = dateTime;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
             }
         }
     }

@@ -9,10 +9,11 @@ namespace Lesson2.Scenes
     public class SpaceScene : Scene
     {
         private List<GameObjects> _stars = new List<GameObjects>();
-        
-        
+
         private ThreadList<Asteroid> _asteroids = new ThreadList<Asteroid>();
         private ThreadList<Bullet> _bullets = new ThreadList<Bullet>();
+        private ThreadList<Medic> _medics = new ThreadList<Medic>();
+
         private SpaceShip _ship;
 
         protected override void OnLoad()
@@ -32,19 +33,17 @@ namespace Lesson2.Scenes
 
             Logger.Print("Created {0} stars", _stars.Count);
 
-            for (var i = 0; i < 3; i++)
-            {
-                _asteroids.Add(GameObjectsFactory.CreateAsteroid());
-            }
-
             _ship = GameObjectsFactory.CreateSpaceShip();
+            
+            
+            var medic = GameObjectsFactory.CreateMedic();
+            _medics.Add(medic);
 
             AddDrawable(_stars);
-            _asteroids.ForEach(asteroid => AddDrawable(asteroid));
+            AddDrawable(medic);
             AddDrawable(_ship);
 
             AddUpdatable(_stars);
-            _asteroids.ForEach(asteroid => AddUpdatable(asteroid));
         }
 
         private void Shoot(IEventArgs args)
@@ -66,10 +65,28 @@ namespace Lesson2.Scenes
                 Logger.Error(ex.Message);
                 Logger.Error(ex.StackTrace);
             }
+            
+            try
+            {
+                _medics.ForEach(medic =>
+                {
+                    medic.Collision(_ship);
+                    medic.Update(totalSeconds);
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+                Logger.Error(ex.StackTrace);
+            }
 
             try
             {
-                _bullets.ForEach(bullet => bullet.Update(totalSeconds));
+                _bullets.ForEach(bullet =>
+                {
+                    _asteroids.ForEach(asteroid => asteroid.Collision(bullet));
+                    bullet.Update(totalSeconds);
+                });
             }
             catch (Exception ex)
             {
@@ -79,6 +96,9 @@ namespace Lesson2.Scenes
 
             _asteroids.RemoveAll(asteroid => asteroid.IsDead);
             _bullets.RemoveAll(bullet => bullet.IsDead);
+            _medics.RemoveAll(medic => medic.IsDead);
+
+            Console.WriteLine(_ship.Enegry);
         }
     }
 }

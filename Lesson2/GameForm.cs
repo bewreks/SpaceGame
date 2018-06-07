@@ -32,10 +32,21 @@ namespace Lesson2
             Logger.Print("Form created");
 
             // Запуск потоков на Update + отрисовку
-            _updateThread = new Thread(Drawer.Update);
-            _drawThread = new Thread(Drawer.Draw);
+            _updateThread = new Thread(() => {
+                while (true)
+                {
+                    Drawer.Draw();
+                }
+            });
+            _drawThread = new Thread(() => {
+                while (true)
+                {
+                    Drawer.Draw();
+                }
+            });
             
             _gameThread = new Thread(Game);
+            _gameThread.IsBackground = true;
 
             Shown += Start;
             Closed += End;
@@ -87,10 +98,9 @@ namespace Lesson2
         private void End(object sender, EventArgs e)
         {
             Logger.Print("Form closed");
-//            _drawThread.Abort();
-//            _updateThread.Abort();
-            
-            _gameThread.Abort();
+//            _drawThread.Suspend();
+//            _updateThread.Suspend();
+            _gameThread.Suspend();
         }
 
         private void Start(object sender, EventArgs e)
