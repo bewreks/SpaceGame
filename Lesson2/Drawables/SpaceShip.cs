@@ -3,6 +3,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
+using Lesson2.Events;
 
 namespace Lesson2.Scenes
 {
@@ -106,11 +107,15 @@ namespace Lesson2.Scenes
             if (obj is Asteroid)
             {
                 Enegry -= (obj as Asteroid).Energy;
+                EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
+                    new ChangeScoreEvent(-(obj as Asteroid).Score));
             }
 
             if (obj is Medic)
             {
                 Enegry += (obj as Medic).Energy;
+                EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent, new ChangeScoreEvent((obj as Medic).Score));
+                
             }
         }
 

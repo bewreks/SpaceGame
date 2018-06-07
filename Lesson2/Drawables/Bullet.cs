@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using Lesson2.Drawables.BaseObjects;
+using Lesson2.Events;
 using Lesson2.Loggers;
 
 namespace Lesson2.Drawables
@@ -20,7 +21,7 @@ namespace Lesson2.Drawables
 
         public override void Draw(Graphics graphics)
         {
-            if (_isDead)return;
+            if (_isDead) return;
             graphics.DrawRectangle(Pens.OrangeRed, _position.X, _position.Y, _size.Width, _size.Height);
         }
 
@@ -36,17 +37,13 @@ namespace Lesson2.Drawables
 
         public override void OnCollision(ICollision obj)
         {
-            if (_isDead)return;
+            if (_isDead) return;
             if (obj is Asteroid)
             {
+                EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
+                    new ChangeScoreEvent((obj as Asteroid).Score));
                 System.Media.SystemSounds.Hand.Play();
             }
-        }
-
-        private void Reset()
-        {
-            _position.X = 0;
-            _position.Y = _random.Next(Drawer.Height);
         }
     }
 }

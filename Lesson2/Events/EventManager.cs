@@ -10,7 +10,8 @@ namespace Lesson2
             UpEvent,
             DownEvent,
             ShootEvent,
-            MoveEvent
+            MoveEvent,
+            ChangeScoreEvent
         }
 
         public delegate void EventFunc(IEventArgs args);

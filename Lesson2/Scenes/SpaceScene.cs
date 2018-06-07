@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
+using Lesson2.Events;
 using Lesson2.Loggers;
 
 namespace Lesson2.Scenes
@@ -15,12 +17,18 @@ namespace Lesson2.Scenes
         private ThreadList<Medic> _medics = new ThreadList<Medic>();
 
         private SpaceShip _ship;
+        private Timer _timer;
+
+        public int Score { get; set; }
 
         protected override void OnLoad()
         {
             Logger.Print("Space scene start load");
 
             EventManager.AddEventListener(EventManager.Events.ShootEvent, Shoot);
+            EventManager.AddEventListener(EventManager.Events.ChangeScoreEvent, onChangeScore);
+
+            Score = 0;
 
             _stars.Clear();
             _asteroids.Clear();
@@ -34,16 +42,39 @@ namespace Lesson2.Scenes
             Logger.Print("Created {0} stars", _stars.Count);
 
             _ship = GameObjectsFactory.CreateSpaceShip();
-            
-            
-            var medic = GameObjectsFactory.CreateMedic();
-            _medics.Add(medic);
+
+            var random = new Random();
+            _timer = new Timer();
+            _timer.Interval = 2000;
+            _timer.Tick += (sender, args) =>
+            {
+                GameObjects obj;
+                var next = random.Next(100);
+                if (next % 2 == 0)
+                {
+                    obj = GameObjectsFactory.CreateAsteroid();
+                    _asteroids.Add(obj as Asteroid);
+                    AddUpdatable(obj);
+                }
+                else
+                {
+                    obj = GameObjectsFactory.CreateMedic();
+                    _medics.Add(obj as Medic);
+                }
+
+                AddDrawable(obj);
+            };
+            _timer.Start();
 
             AddDrawable(_stars);
-            AddDrawable(medic);
             AddDrawable(_ship);
 
             AddUpdatable(_stars);
+        }
+
+        private void onChangeScore(IEventArgs args)
+        {
+            Score += (args as ChangeScoreEvent).Score;
         }
 
         private void Shoot(IEventArgs args)
@@ -65,7 +96,7 @@ namespace Lesson2.Scenes
                 Logger.Error(ex.Message);
                 Logger.Error(ex.StackTrace);
             }
-            
+
             try
             {
                 _medics.ForEach(medic =>
@@ -98,7 +129,8 @@ namespace Lesson2.Scenes
             _bullets.RemoveAll(bullet => bullet.IsDead);
             _medics.RemoveAll(medic => medic.IsDead);
 
-            Console.WriteLine(_ship.Enegry);
+            Logger.Print("Ship HP: {0}", _ship.Enegry);
+            Logger.Print("Score: {0}", Score);
         }
     }
 }

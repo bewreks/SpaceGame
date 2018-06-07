@@ -55,6 +55,7 @@
     <Compile Include="Drawables\TextBox.cs" />
     <Compile Include="Drawables\XStar.cs" />
     <Compile Include="Drawer.cs" />
+    <Compile Include="Events\ChangeScoreEvent.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\GameEventArgs.cs" />
     <Compile Include="Events\IEventArgs.cs" />
@@ -69,7 +70,6 @@
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Scenes\SpaceScene.cs" />
     <Compile Include="Scenes\SplashScene.cs" />
-    <Compile Include="Threads\IThreadList.cs" />
     <Compile Include="Threads\ThreadList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

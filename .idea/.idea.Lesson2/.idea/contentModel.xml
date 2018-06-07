@@ -25,6 +25,7 @@
         </e>
         <e p="Drawer.cs" t="Include" />
         <e p="Events" t="Include">
+          <e p="ChangeScoreEvent.cs" t="Include" />
           <e p="EventManager.cs" t="Include" />
           <e p="GameEventArgs.cs" t="Include" />
           <e p="IEventArgs.cs" t="Include" />
@@ -49,7 +50,6 @@
           <e p="SplashScene.cs" t="Include" />
         </e>
         <e p="Threads" t="Include">
-          <e p="IThreadList.cs" t="Include" />
           <e p="ThreadList.cs" t="Include" />
         </e>
       </e>

@@ -7,20 +7,16 @@ namespace Lesson2.Drawables
     {
         private bool _isDead;
 
-        public bool IsDead
-        {
-            get
-            {
-                return _isDead;
-            }
-        }
+        public bool IsDead => _isDead;
 
-        public int Energy { get; set; }
+        public int Energy { get; }
+        public int Score { get; }
 
         public Medic(Point position, Point dir, Size size) : base(position, dir, size)
         {
             Energy = 10;
             _isDead = false;
+            Score = 1;
         }
 
         public override void Draw(Graphics graphics)

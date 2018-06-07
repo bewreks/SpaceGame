@@ -10,12 +10,14 @@ namespace Lesson2.Drawables
         private bool _isDead;
 
         public bool IsDead => _isDead;
-        public int Energy { get; set; }
+        public int Energy { get; }
+        public int Score { get; }
 
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             Energy = 5;
             _isDead = false;
+            Score = 5;
         }
 
         public override void Draw(Graphics graphics)

@@ -6,9 +6,9 @@ using Lesson2.Scenes;
 
 namespace Lesson2
 {
-    public class ThreadList<T> : IThreadList<T>
+    public class ThreadList<T>
     {
-        private ReaderWriterLockSlim cacheLock = new ReaderWriterLockSlim();
+        private ReaderWriterLockSlim _cacheLock = new ReaderWriterLockSlim();
         private List<T> _list;
 
         public ThreadList()
@@ -16,81 +16,86 @@ namespace Lesson2
             _list = new List<T>();
         }
 
+        ~ThreadList()
+        {
+            _cacheLock.Dispose();
+        }
+
         public void RemoveAll(Predicate<T> match)
         {
-            cacheLock.EnterWriteLock();
+            _cacheLock.EnterWriteLock();
             try
             {
                 _list.RemoveAll(match);
             }
             finally
             {
-                cacheLock.ExitWriteLock();
+                _cacheLock.ExitWriteLock();
             }
         }
 
         public void Add(T obj)
         {
-            cacheLock.EnterWriteLock();
+            _cacheLock.EnterWriteLock();
             try
             {
                 _list.Add(obj);
             }
             finally
             {
-                cacheLock.ExitWriteLock();
+                _cacheLock.ExitWriteLock();
             }
         }
 
         public void Add(IEnumerable<T> collection)
         {
-            cacheLock.EnterWriteLock();
+            _cacheLock.EnterWriteLock();
             try
             {
                 _list.AddRange(collection);
             }
             finally
             {
-                cacheLock.ExitWriteLock();
+                _cacheLock.ExitWriteLock();
             }
         }
 
         public void Clear()
         {
-            cacheLock.EnterWriteLock();
+            _cacheLock.EnterWriteLock();
             try
             {
                 _list.Clear();
             }
             finally
             {
-                cacheLock.ExitWriteLock();
+                _cacheLock.ExitWriteLock();
             }
         }
 
         public void ForEach(Action<T> action)
         {
-            cacheLock.EnterReadLock();
+            _cacheLock.EnterReadLock();
             try
             {
                 _list.ForEach(action);
             }
             finally
             {
-                cacheLock.ExitReadLock();
+                _cacheLock.ExitReadLock();
             }
         }
 
         public void Remove(T obj)
         {
-            cacheLock.EnterWriteLock();
+            _cacheLock.EnterWriteLock();
             try
             {
                 _list.Remove(obj);
             }
             finally
             {
-                cacheLock.ExitWriteLock();
+                _cacheLock.ExitWriteLock();
             }
         }
     }
