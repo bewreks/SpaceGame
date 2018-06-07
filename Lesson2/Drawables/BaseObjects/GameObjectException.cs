@@ -1,4 +1,5 @@
 ﻿using System;
+using Lesson2.Loggers;
 
 namespace Lesson2.Drawables.BaseObjects
 {
@@ -6,7 +7,8 @@ namespace Lesson2.Drawables.BaseObjects
     {
         public GameObjectException(string message):base(message)
         {
-            
+            Logger.Error(message);
+            Logger.Error(StackTrace);
         }
     }
 }

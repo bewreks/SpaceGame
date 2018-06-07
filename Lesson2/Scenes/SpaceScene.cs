@@ -75,6 +75,7 @@ namespace Lesson2.Scenes
         private void onChangeScore(IEventArgs args)
         {
             Score += (args as ChangeScoreEvent).Score;
+            Logger.Print("Score: {0}", Score);
         }
 
         private void Shoot(IEventArgs args)
@@ -129,8 +130,6 @@ namespace Lesson2.Scenes
             _bullets.RemoveAll(bullet => bullet.IsDead);
             _medics.RemoveAll(medic => medic.IsDead);
 
-            Logger.Print("Ship HP: {0}", _ship.Enegry);
-            Logger.Print("Score: {0}", Score);
         }
     }
 }

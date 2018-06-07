@@ -63,6 +63,7 @@
     <Compile Include="GameForm.cs" />
     <Compile Include="GameObjectsFactory.cs" />
     <Compile Include="Loggers\ConsoleLogger.cs" />
+    <Compile Include="Loggers\FileLogger.cs" />
     <Compile Include="Loggers\ILogger.cs" />
     <Compile Include="Loggers\Logger.cs" />
     <Compile Include="Program.cs" />

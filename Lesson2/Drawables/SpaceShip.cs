@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
 using Lesson2.Events;
+using Lesson2.Loggers;
 
 namespace Lesson2.Scenes
 {
@@ -104,18 +105,25 @@ namespace Lesson2.Scenes
 
         public override void OnCollision(ICollision obj)
         {
+            bool updated = false;
             if (obj is Asteroid)
             {
                 Enegry -= (obj as Asteroid).Energy;
                 EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
                     new ChangeScoreEvent(-(obj as Asteroid).Score));
+                updated = true;
             }
 
             if (obj is Medic)
             {
                 Enegry += (obj as Medic).Energy;
                 EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent, new ChangeScoreEvent((obj as Medic).Score));
-                
+                updated = true;
+            }
+
+            if (updated)
+            {
+                Logger.Print("Ship HP: {0}", Enegry);
             }
         }
 

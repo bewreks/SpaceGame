@@ -36,6 +36,7 @@
         <e p="Lesson2.csproj" t="IncludeRecursive" />
         <e p="Loggers" t="Include">
           <e p="ConsoleLogger.cs" t="Include" />
+          <e p="FileLogger.cs" t="Include" />
           <e p="ILogger.cs" t="Include" />
           <e p="Logger.cs" t="Include" />
         </e>

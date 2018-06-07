@@ -18,6 +18,10 @@ namespace Lesson2
         public GameForm()
         {
             Logger.Init(new ConsoleLogger());
+            Logger.AddLogger(new FileLogger());
+            
+            Logger.Error("test");
+            Logger.Error("test {0}", 1);
 
             Logger.Print("Start form");
             // Настройка формы
