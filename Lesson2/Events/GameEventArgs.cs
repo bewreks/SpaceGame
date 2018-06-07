@@ -1,4 +1,4 @@
-﻿namespace Lesson2
+﻿namespace Lesson2.Events
 {
     public class GameEventArgs : IEventArgs
     {

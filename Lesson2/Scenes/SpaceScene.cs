@@ -5,6 +5,7 @@ using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
 using Lesson2.Events;
 using Lesson2.Loggers;
+using Lesson2.Threads;
 
 namespace Lesson2.Scenes
 {
@@ -26,7 +27,7 @@ namespace Lesson2.Scenes
             Logger.Print("Space scene start load");
 
             EventManager.AddEventListener(EventManager.Events.ShootEvent, Shoot);
-            EventManager.AddEventListener(EventManager.Events.ChangeScoreEvent, onChangeScore);
+            EventManager.AddEventListener(EventManager.Events.ChangeScoreEvent, OnChangeScore);
 
             Score = 0;
 
@@ -72,12 +73,13 @@ namespace Lesson2.Scenes
             AddUpdatable(_stars);
         }
 
-        private void onChangeScore(IEventArgs args)
+        private void OnChangeScore(IEventArgs args)
         {
             Score += (args as ChangeScoreEvent).Score;
             Logger.Print("Score: {0}", Score);
         }
 
+        // TODO: добавить отграничение скорострельность
         private void Shoot(IEventArgs args)
         {
             var bullet = GameObjectsFactory.CreateBullet(_ship.GetPoint());
@@ -129,7 +131,6 @@ namespace Lesson2.Scenes
             _asteroids.RemoveAll(asteroid => asteroid.IsDead);
             _bullets.RemoveAll(bullet => bullet.IsDead);
             _medics.RemoveAll(medic => medic.IsDead);
-
         }
     }
 }

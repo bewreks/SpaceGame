@@ -29,7 +29,7 @@ namespace Lesson2.Drawables
 
         public override void Update(float totalSeconds)
         {
-            if (IsDead) 
+            if (IsDead)
                 return;
 
             _position.X = _position.X + _dir.X * totalSeconds;

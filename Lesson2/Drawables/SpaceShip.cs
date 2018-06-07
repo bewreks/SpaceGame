@@ -15,7 +15,7 @@ namespace Lesson2.Scenes
         private float _scaleY;
 
         private MouseMoveGameEvent _prEventArgs;
-        
+
         public int Enegry { get; set; }
 
         public SpaceShip(Point position, Point dir, Size size) : base(position, dir, size)
@@ -105,20 +105,22 @@ namespace Lesson2.Scenes
 
         public override void OnCollision(ICollision obj)
         {
-            bool updated = false;
-            if (obj is Asteroid)
+            var updated = false;
+            switch (obj)
             {
-                Enegry -= (obj as Asteroid).Energy;
-                EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
-                    new ChangeScoreEvent(-(obj as Asteroid).Score));
-                updated = true;
-            }
-
-            if (obj is Medic)
-            {
-                Enegry += (obj as Medic).Energy;
-                EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent, new ChangeScoreEvent((obj as Medic).Score));
-                updated = true;
+                case Asteroid _:
+                    Enegry -= (obj as Asteroid).Energy;
+                    EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
+                        new ChangeScoreEvent(-(obj as Asteroid).Score));
+                    updated = true;
+                    break;
+                
+                case Medic _:
+                    Enegry += (obj as Medic).Energy;
+                    EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
+                        new ChangeScoreEvent((obj as Medic).Score));
+                    updated = true;
+                    break;
             }
 
             if (updated)

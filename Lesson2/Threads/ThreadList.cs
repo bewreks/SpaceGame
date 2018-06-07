@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Lesson2.Drawables.BaseObjects;
-using Lesson2.Scenes;
 
-namespace Lesson2
+namespace Lesson2.Threads
 {
     public class ThreadList<T>
     {

@@ -21,13 +21,14 @@ namespace Lesson2.Drawables
 
         public override void Draw(Graphics graphics)
         {
-            if (_isDead) return;
+            if (IsDead) return;
             graphics.DrawRectangle(Pens.OrangeRed, _position.X, _position.Y, _size.Width, _size.Height);
         }
 
         public override void Update(float totalSeconds)
         {
-            if (_isDead) return;
+            if (IsDead) return;
+
             _position.X = _position.X + _dir.X * totalSeconds;
             if (_position.X >= Drawer.Width)
             {
@@ -37,7 +38,8 @@ namespace Lesson2.Drawables
 
         public override void OnCollision(ICollision obj)
         {
-            if (_isDead) return;
+            if (IsDead) return;
+            
             if (obj is Asteroid)
             {
                 EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,

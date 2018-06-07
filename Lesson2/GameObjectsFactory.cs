@@ -9,13 +9,13 @@ namespace Lesson2
     public static class GameObjectsFactory
     {
         private static Random rnd = new Random();
-        
+
         public static GameObjects CreateStar()
         {
             var position = new Point(rnd.Next(0, Drawer.Width), rnd.Next(0, Drawer.Height));
             var direction = new Point(-rnd.Next(50, 500), 0);
             var size = new Size(3, 3);
-                
+
             var type = rnd.Next(2) % 2 == 0 ? typeof(Star) : typeof(XStar);
 
             return (GameObjects) Activator.CreateInstance(type, position, direction, size);

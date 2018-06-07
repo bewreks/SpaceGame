@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using Lesson2.Events;
 using Lesson2.Loggers;
 using Lesson2.Scenes;
 using Timer = System.Windows.Forms.Timer;
@@ -12,14 +13,14 @@ namespace Lesson2
     {
         private Thread _updateThread;
         private Thread _drawThread;
-        
+
         private Thread _gameThread;
 
         public GameForm()
         {
             Logger.Init(new ConsoleLogger());
             Logger.AddLogger(new FileLogger());
-            
+
             Logger.Error("test");
             Logger.Error("test {0}", 1);
 
@@ -36,19 +37,21 @@ namespace Lesson2
             Logger.Print("Form created");
 
             // Запуск потоков на Update + отрисовку
-            _updateThread = new Thread(() => {
+            _updateThread = new Thread(() =>
+            {
                 while (true)
                 {
                     Drawer.Draw();
                 }
             });
-            _drawThread = new Thread(() => {
+            _drawThread = new Thread(() =>
+            {
                 while (true)
                 {
                     Drawer.Draw();
                 }
             });
-            
+
             _gameThread = new Thread(Game);
             _gameThread.IsBackground = true;
 
@@ -56,7 +59,7 @@ namespace Lesson2
             Closed += End;
             KeyDown += OnKeyDown;
             MouseMove += OnMouseMove;
-            MouseClick += OnMouseClick;
+            MouseDown += OnMouseClick;
 
             // Инициализация класса отрисовки
             // В целом бесполезен, но так красивее и правильнее
@@ -80,7 +83,6 @@ namespace Lesson2
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             EventManager.DispatchEvent(EventManager.Events.MoveEvent, new MouseMoveGameEvent(e.X, e.Y));
-            
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -114,7 +116,7 @@ namespace Lesson2
             Drawer.SetScene(new SpaceScene());
 //            _updateThread.Start();
 //            _drawThread.Start();
-            
+
             _gameThread.Start();
         }
     }

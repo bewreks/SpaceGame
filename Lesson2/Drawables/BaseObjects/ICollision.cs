@@ -7,6 +7,5 @@ namespace Lesson2.Drawables.BaseObjects
         bool Collision(ICollision obj);
         void OnCollision(ICollision obj);
         Rectangle Rect { get; }
-
     }
 }

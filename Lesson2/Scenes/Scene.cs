@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Lesson2.Drawables.BaseObjects;
 using Lesson2.Loggers;
+using Lesson2.Threads;
 
 namespace Lesson2.Scenes
 {
@@ -32,9 +33,8 @@ namespace Lesson2.Scenes
             _loaded = false;
 
             _toUpdate = new ThreadList<IUpdatable>();
-            
+
             _toDraw = new ThreadList<IDrawable>();
-            
         }
 
         // Перебераем весь список, но оставляем пользователю возможность
@@ -121,11 +121,6 @@ namespace Lesson2.Scenes
         protected void AddDrawable(IEnumerable<IDrawable> collection)
         {
             _toDraw.Add(collection);
-        }
-
-        protected void RemoveDrawable(IDrawable drawable)
-        {
-            _toDraw.Remove(drawable);
         }
 
         private void FPSCalc()

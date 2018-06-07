@@ -18,7 +18,7 @@ namespace Lesson2.Loggers
         {
             var foregroundColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("[ERROR] " +message);
+            Console.WriteLine("[ERROR] " + message);
             Console.ForegroundColor = foregroundColor;
         }
 

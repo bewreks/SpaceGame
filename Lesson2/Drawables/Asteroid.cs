@@ -1,7 +1,5 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using Lesson2.Drawables.BaseObjects;
-using Lesson2.Loggers;
 
 namespace Lesson2.Drawables
 {
@@ -10,6 +8,7 @@ namespace Lesson2.Drawables
         private bool _isDead;
 
         public bool IsDead => _isDead;
+
         public int Energy { get; }
         public int Score { get; }
 
@@ -22,29 +21,25 @@ namespace Lesson2.Drawables
 
         public override void Draw(Graphics graphics)
         {
-            if (_isDead) return;
+            if (IsDead) return;
 
             graphics.FillEllipse(Brushes.White, _position.X, _position.Y, _size.Width, _size.Height);
         }
 
         public override void Update(float totalSeconds)
         {
-            if (_isDead) return;
+            if (IsDead) return;
 
             _position.X = _position.X + _dir.X * totalSeconds;
-            if (_position.X < 0) Reset();
+            if (_position.X < 0)
+            {
+                // Потом можно отнимать счет за пропущенные астероиды
+            }
         }
 
         public override void OnCollision(ICollision obj)
         {
             _isDead = true;
         }
-
-        private void Reset()
-        {
-            _position.X = Drawer.Width + _size.Width;
-            _position.Y = new Random().Next(Drawer.Height);
-        }
-
     }
 }

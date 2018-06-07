@@ -10,7 +10,7 @@ namespace Lesson2
         private const float FadeInTime = 2;
         private const float FadeOutTime = 2;
         private const float WaitingTime = 5;
-        
+
         private float alpha;
         private float wait;
         private Function _action;
@@ -25,10 +25,10 @@ namespace Lesson2
 
             alpha = 255;
             wait = 0;
-            
+
             AddDrawable(new TextBox(new Point(230, 200), "Space Game", new Font("Arial", 40), Brushes.White));
             AddDrawable(new TextBox(new Point(570, 540), "Соколовский Дмитрий", new Font("Arial", 14), Brushes.White));
- 
+
             _action = FadeOut;
         }
 
@@ -36,8 +36,9 @@ namespace Lesson2
         public override void Draw(Graphics graphics)
         {
             base.Draw(graphics);
-            
-            graphics.FillRectangle(new SolidBrush(Color.FromArgb((int) alpha, Color.Black)), 0, 0, Drawer.Width, Drawer.Height);
+
+            graphics.FillRectangle(new SolidBrush(Color.FromArgb((int) alpha, Color.Black)), 0, 0, Drawer.Width,
+                Drawer.Height);
         }
 
         public override void Update(float totalSeconds)
@@ -50,7 +51,7 @@ namespace Lesson2
         private void FadeIn(float totalSeconds)
         {
             wait += totalSeconds;
-            alpha = 255 * (1/FadeInTime) * wait;
+            alpha = 255 * (1 / FadeInTime) * wait;
             if (wait >= FadeInTime)
             {
                 wait = 0;
@@ -62,7 +63,7 @@ namespace Lesson2
         private void FadeOut(float totalSeconds)
         {
             wait += totalSeconds;
-            alpha = 255 * (1/FadeOutTime) * (FadeOutTime - wait);
+            alpha = 255 * (1 / FadeOutTime) * (FadeOutTime - wait);
             if (wait >= FadeOutTime)
             {
                 wait = 0;
