@@ -11,7 +11,8 @@ namespace Lesson2.Events
             DownEvent,
             ShootEvent,
             MoveEvent,
-            ChangeScoreEvent
+            ChangeScoreEvent,
+            StageCompletedEvent
         }
 
         public delegate void EventFunc(IEventArgs args);
@@ -38,10 +39,12 @@ namespace Lesson2.Events
         {
             if (!_container.ContainsKey(e))
             {
-                _container.Add(e, args => { });
+                _container.Add(e, func);
             }
-
-            _container[e] += func;
+            else
+            {
+                _container[e] += func;
+            }
         }
     }
 }

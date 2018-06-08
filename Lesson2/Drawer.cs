@@ -52,11 +52,13 @@ namespace Lesson2
         {
             _scene = scene;
             _scene.Load();
+            _scene.OnShown();
         }
 
         public static void SetLoadedScene(Scene scene)
         {
             _scene = scene;
+            _scene.OnShown();
         }
 
         public static void Init(Form form)

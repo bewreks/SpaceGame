@@ -103,6 +103,11 @@ namespace Lesson2.Scenes
             _loaded = true;
         }
 
+        public virtual void OnShown()
+        {
+            
+        }
+
         protected void AddUpdatable(IUpdatable updatable)
         {
             _toUpdate.Add(updatable);
@@ -151,5 +156,6 @@ namespace Lesson2.Scenes
 
         // Метод создания объектов сцены
         protected abstract void OnLoad();
+        
     }
 }

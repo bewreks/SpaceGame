@@ -12,6 +12,7 @@ namespace Lesson2.Scenes
     public class SpaceScene : Scene
     {
         private List<GameObjects> _stars = new List<GameObjects>();
+        private Queue<GameObjects> _objects = new Queue<GameObjects>();
 
         private ThreadList<Asteroid> _asteroids = new ThreadList<Asteroid>();
         private ThreadList<Bullet> _bullets = new ThreadList<Bullet>();
@@ -19,77 +20,16 @@ namespace Lesson2.Scenes
 
         private SpaceShip _ship;
         private Timer _timer;
+        private int _count;
+
+        private bool _waiting = false;
 
         public int Score { get; set; }
-
-        protected override void OnLoad()
-        {
-            Logger.Print("Space scene start load");
-
-            EventManager.AddEventListener(EventManager.Events.ShootEvent, Shoot);
-            EventManager.AddEventListener(EventManager.Events.ChangeScoreEvent, OnChangeScore);
-
-            Score = 0;
-
-            _stars.Clear();
-            _asteroids.Clear();
-            _bullets.Clear();
-
-            for (var i = 0; i < 100; i++)
-            {
-                _stars.Add(GameObjectsFactory.CreateStar());
-            }
-
-            Logger.Print("Created {0} stars", _stars.Count);
-
-            _ship = GameObjectsFactory.CreateSpaceShip();
-
-            var random = new Random();
-            _timer = new Timer();
-            _timer.Interval = 2000;
-            _timer.Tick += (sender, args) =>
-            {
-                GameObjects obj;
-                var next = random.Next(100);
-                if (next % 2 == 0)
-                {
-                    obj = GameObjectsFactory.CreateAsteroid();
-                    _asteroids.Add(obj as Asteroid);
-                    AddUpdatable(obj);
-                }
-                else
-                {
-                    obj = GameObjectsFactory.CreateMedic();
-                    _medics.Add(obj as Medic);
-                }
-
-                AddDrawable(obj);
-            };
-            _timer.Start();
-
-            AddDrawable(_stars);
-            AddDrawable(_ship);
-
-            AddUpdatable(_stars);
-        }
-
-        private void OnChangeScore(IEventArgs args)
-        {
-            Score += (args as ChangeScoreEvent).Score;
-            Logger.Print("Score: {0}", Score);
-        }
-
-        // TODO: добавить отграничение скорострельность
-        private void Shoot(IEventArgs args)
-        {
-            var bullet = GameObjectsFactory.CreateBullet(_ship.GetPoint());
-            _bullets.Add(bullet);
-            AddDrawable(bullet);
-        }
 
         public override void Update(float totalSeconds)
         {
             base.Update(totalSeconds);
+            
             try
             {
                 _asteroids.ForEach(asteroid => asteroid.Collision(_ship));
@@ -132,5 +72,124 @@ namespace Lesson2.Scenes
             _bullets.RemoveAll(bullet => bullet.IsDead);
             _medics.RemoveAll(medic => medic.IsDead);
         }
+
+        public override void OnShown()
+        {
+            _timer.Start();
+        }
+
+        protected override void OnLoad()
+        {
+            Logger.Print("Space scene start load");
+
+            EventManager.AddEventListener(EventManager.Events.ShootEvent, Shoot);
+            EventManager.AddEventListener(EventManager.Events.ChangeScoreEvent, OnChangeScore);
+            EventManager.AddEventListener(EventManager.Events.StageCompletedEvent, OnStageCompleted);
+
+            Score = 0;
+
+            _count = 10;
+
+            _stars.Clear();
+            _asteroids.Clear();
+            _bullets.Clear();
+
+            for (var i = 0; i < 100; i++)
+            {
+                _stars.Add(GameObjectsFactory.CreateStar());
+            }
+
+            Logger.Print("Created {0} stars", _stars.Count);
+
+            _ship = GameObjectsFactory.CreateSpaceShip();
+
+            _timer = new Timer();
+            _timer.Interval = 1000;
+            _timer.Tick += (sender, args) =>
+            {
+                if (_objects.Count == 0)
+                {
+                    if (!_waiting)
+                    {
+                        _waiting = true;
+                        EventManager.DispatchEvent(EventManager.Events.StageCompletedEvent);
+                    }
+
+                    return;
+                }
+                
+                var obj = _objects.Dequeue();
+                switch (obj)
+                {
+                    case Asteroid _:
+                        _asteroids.Add(obj as Asteroid);
+                        AddUpdatable(obj);
+                        break;
+                    case Medic _:
+                        _medics.Add(obj as Medic);
+                        break;
+                }
+
+                AddDrawable(obj);
+                
+            };
+
+            AddDrawable(_stars);
+            AddDrawable(_ship);
+
+            AddUpdatable(_stars);
+            
+            LoadQueue();
+        }
+
+        private void OnStageCompleted(IEventArgs arg)
+        {
+            _timer.Stop();
+            var timer = new Timer {Interval = 5000};
+            timer.Tick += (sender, args) =>
+            {
+                timer.Stop();
+                LoadQueue();
+                _timer.Start();
+                _waiting = false;
+            };
+            timer.Start();
+        }
+
+        private void OnChangeScore(IEventArgs args)
+        {
+            Score += (args as ChangeScoreEvent).Score;
+            Logger.Print("Score: {0}", Score);
+        }
+
+        // TODO: добавить отграничение скорострельность
+        private void Shoot(IEventArgs args)
+        {
+            var bullet = GameObjectsFactory.CreateBullet(_ship.GetPoint());
+            _bullets.Add(bullet);
+            AddDrawable(bullet);
+        }
+
+        private void LoadQueue()
+        {
+            var random = new Random();
+            for (int i = 0; i < _count; i++)
+            {
+                GameObjects obj;
+                var next = random.Next(100);
+                if (next % 10 == 0)
+                {
+                    obj = GameObjectsFactory.CreateMedic();
+                }
+                else
+                {
+                    obj = GameObjectsFactory.CreateAsteroid();
+                }
+
+                _objects.Enqueue(obj);
+            }
+            _count++;
+        }
+        
     }
 }
