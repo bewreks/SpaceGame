@@ -38,10 +38,12 @@ namespace Lesson2.Events
         {
             if (!_container.ContainsKey(e))
             {
-                _container.Add(e, args => { });
+                _container.Add(e, func);
             }
-
-            _container[e] += func;
+            else
+            {
+                _container[e] += func;
+            }
         }
     }
 }
