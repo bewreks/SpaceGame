@@ -22,13 +22,13 @@ namespace Lesson2
 
         private void OnChangeEvent(IEventArgs args)
         {
-            _hp += (args as ChangeScoreEvent).Score;
+            _hp += (args as ChangeScoreEvent)?.Score??0;
             Logger.Print("HP: {0}", Hp);
         }
 
         private void OnChangeScore(IEventArgs args)
         {
-            _score += (args as ChangeScoreEvent).Score;
+            _score += (args as ChangeScoreEvent)?.Score??0;
             Logger.Print("Score: {0}", Score);
         }
     }
