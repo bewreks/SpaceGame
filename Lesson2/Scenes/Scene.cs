@@ -39,7 +39,7 @@ namespace Lesson2.Scenes
 
         // Перебераем весь список, но оставляем пользователю возможность
         // переопределить метод и обновлять данные как ему надо
-        public virtual void Update(float totalSeconds)
+        public virtual void Update(float delta)
         {
             if (!_loaded)
             {
@@ -50,7 +50,7 @@ namespace Lesson2.Scenes
             _toUpdate.RemoveAll(DeleteIfDead);
             try
             {
-                _toUpdate.ForEach(updatable => updatable.Update(totalSeconds));
+                _toUpdate.ForEach(updatable => updatable.Update(delta));
             }
             catch (Exception ex)
             {

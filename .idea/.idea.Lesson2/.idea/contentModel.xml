@@ -50,6 +50,16 @@
           <e p="SpaceScene.cs" t="Include" />
           <e p="SplashScene.cs" t="Include" />
         </e>
+        <e p="States" t="Include">
+          <e p="Scenes" t="Include">
+            <e p="SplashSceneStates" t="Include">
+              <e p="SplashSceneState.cs" t="Include" />
+              <e p="SplashSceneStateEnd.cs" t="Include" />
+              <e p="SplashSceneStateLoad.cs" t="Include" />
+              <e p="SplashSceneStateStart.cs" t="Include" />
+            </e>
+          </e>
+        </e>
         <e p="Threads" t="Include">
           <e p="ThreadList.cs" t="Include" />
         </e>

@@ -24,9 +24,9 @@ namespace Lesson2.Scenes
 
         private bool _waiting = false;
 
-        public override void Update(float totalSeconds)
+        public override void Update(float delta)
         {
-            base.Update(totalSeconds);
+            base.Update(delta);
             
             try
             {
@@ -43,7 +43,7 @@ namespace Lesson2.Scenes
                 _medics.ForEach(medic =>
                 {
                     medic.Collision(_ship);
-                    medic.Update(totalSeconds);
+                    medic.Update(delta);
                 });
             }
             catch (Exception ex)
@@ -57,7 +57,7 @@ namespace Lesson2.Scenes
                 _bullets.ForEach(bullet =>
                 {
                     _asteroids.ForEach(asteroid => asteroid.Collision(bullet));
-                    bullet.Update(totalSeconds);
+                    bullet.Update(delta);
                 });
             }
             catch (Exception ex)

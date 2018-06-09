@@ -71,6 +71,10 @@
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Scenes\SpaceScene.cs" />
     <Compile Include="Scenes\SplashScene.cs" />
+    <Compile Include="States\Scenes\SplashSceneStates\SplashSceneState.cs" />
+    <Compile Include="States\Scenes\SplashSceneStates\SplashSceneStateEnd.cs" />
+    <Compile Include="States\Scenes\SplashSceneStates\SplashSceneStateLoad.cs" />
+    <Compile Include="States\Scenes\SplashSceneStates\SplashSceneStateStart.cs" />
     <Compile Include="Threads\ThreadList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

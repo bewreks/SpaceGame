@@ -1,35 +1,46 @@
 ﻿using System.Drawing;
 using Lesson2.Drawables;
 using Lesson2.Loggers;
-using Lesson2.Scenes;
+using Lesson2.States.Scenes.SplashSceneStates;
 
-namespace Lesson2
+namespace Lesson2.Scenes
 {
     public class SplashScene : Scene
     {
-        private const float FadeInTime = 2;
-        private const float FadeOutTime = 2;
-        private const float WaitingTime = 5;
-
-        private float alpha;
+        private float _alpha;
         private float wait;
-        private Function _action;
 
         private Scene _nextScene;
 
-        private delegate void Function(float totalSeconds);
+        private SplashSceneState _state;
+
+        public float Alpha
+        {
+            set => _alpha = value;
+        }
+
+        public SplashSceneState State
+        {
+            set => _state = value;
+        }
+
+        public Scene NextScene
+        {
+            get => _nextScene;
+            set => _nextScene = value;
+        }
 
         protected override void OnLoad()
         {
             Logger.Print("Splash scene start load");
 
-            alpha = 255;
+            _alpha = 255;
             wait = 0;
 
             AddDrawable(new TextBox(new Point(230, 200), "Space Game", new Font("Arial", 40), Brushes.White));
             AddDrawable(new TextBox(new Point(570, 540), "Соколовский Дмитрий", new Font("Arial", 14), Brushes.White));
 
-            _action = FadeOut;
+            State = new SplashSceneStateStart(this);
         }
 
         // Отрисуем сцену, а поверх нарисуем еще квадрат с альфой для симуляции эффекта Fade
@@ -37,53 +48,13 @@ namespace Lesson2
         {
             base.Draw(graphics);
 
-            graphics.FillRectangle(new SolidBrush(Color.FromArgb((int) alpha, Color.Black)), 0, 0, Drawer.Width,
+            graphics.FillRectangle(new SolidBrush(Color.FromArgb((int) _alpha, Color.Black)), 0, 0, Drawer.Width,
                 Drawer.Height);
         }
 
-        public override void Update(float totalSeconds)
+        public override void Update(float delta)
         {
-            // На каждый апдейт вызывается FadeIn, FadeOut или Wait
-            // при достижении определенных параметров эти методы сами меняются на нужные
-            _action?.Invoke(totalSeconds);
-        }
-
-        private void FadeIn(float totalSeconds)
-        {
-            wait += totalSeconds;
-            alpha = 255 * (1 / FadeInTime) * wait;
-            if (wait >= FadeInTime)
-            {
-                wait = 0;
-                _action = null;
-                Drawer.SetLoadedScene(_nextScene);
-            }
-        }
-
-        private void FadeOut(float totalSeconds)
-        {
-            wait += totalSeconds;
-            alpha = 255 * (1 / FadeOutTime) * (FadeOutTime - wait);
-            if (wait >= FadeOutTime)
-            {
-                wait = 0;
-                _action = Wait;
-                _nextScene = new SpaceScene();
-                _nextScene.Load();
-                Logger.Print("Waiting load main scene");
-            }
-        }
-
-        // Не меньше 5-ти секунд показывать сплеш
-        private void Wait(float totalSeconds)
-        {
-            wait += totalSeconds;
-            if (wait >= WaitingTime && _nextScene.Loaded)
-            {
-                wait = 0;
-                _action = FadeIn;
-                Logger.Print("Main scene loaded");
-            }
+            _state.Update(delta);
         }
     }
 }
