@@ -12,6 +12,7 @@ namespace Lesson2.Events
             ShootEvent,
             MoveEvent,
             ChangeScoreEvent,
+            ChangeEnergyEvent,
             StageCompletedEvent
         }
 

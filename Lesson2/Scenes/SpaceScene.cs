@@ -24,8 +24,6 @@ namespace Lesson2.Scenes
 
         private bool _waiting = false;
 
-        public int Score { get; set; }
-
         public override void Update(float totalSeconds)
         {
             base.Update(totalSeconds);
@@ -83,10 +81,7 @@ namespace Lesson2.Scenes
             Logger.Print("Space scene start load");
 
             EventManager.AddEventListener(EventManager.Events.ShootEvent, Shoot);
-            EventManager.AddEventListener(EventManager.Events.ChangeScoreEvent, OnChangeScore);
             EventManager.AddEventListener(EventManager.Events.StageCompletedEvent, OnStageCompleted);
-
-            Score = 0;
 
             _count = 10;
 
@@ -154,12 +149,6 @@ namespace Lesson2.Scenes
                 _waiting = false;
             };
             timer.Start();
-        }
-
-        private void OnChangeScore(IEventArgs args)
-        {
-            Score += (args as ChangeScoreEvent).Score;
-            Logger.Print("Score: {0}", Score);
         }
 
         // TODO: добавить отграничение скорострельность

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Media;
 using System.Threading;
 using System.Windows.Forms;
 using Lesson2.Events;
@@ -15,6 +16,8 @@ namespace Lesson2
         private Thread _drawThread;
 
         private Thread _gameThread;
+
+        private Player _player;
 
         public GameForm()
         {
@@ -54,6 +57,8 @@ namespace Lesson2
 
             _gameThread = new Thread(Game);
             _gameThread.IsBackground = true;
+
+            _player = new Player();
 
             Shown += Start;
             Closed += End;
@@ -118,6 +123,36 @@ namespace Lesson2
 //            _drawThread.Start();
 
             _gameThread.Start();
+        }
+    }
+
+    public class Player
+    {
+        private int _hp;
+        private int _score;
+
+        public int Hp => _hp;
+        public int Score => _score;
+
+        public Player()
+        {
+            _hp = 100;
+            _score = 0;
+            
+            EventManager.AddEventListener(EventManager.Events.ChangeScoreEvent, OnChangeScore);
+            EventManager.AddEventListener(EventManager.Events.ChangeEnergyEvent, OnChangeEvent);
+        }
+
+        private void OnChangeEvent(IEventArgs args)
+        {
+            _hp += (args as ChangeScoreEvent).Score;
+            Logger.Print("HP: {0}", Hp);
+        }
+
+        private void OnChangeScore(IEventArgs args)
+        {
+            _score += (args as ChangeScoreEvent).Score;
+            Logger.Print("Score: {0}", Score);
         }
     }
 }
