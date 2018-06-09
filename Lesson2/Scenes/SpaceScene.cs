@@ -24,6 +24,8 @@ namespace Lesson2.Scenes
 
         private bool _waiting = false;
 
+        private Player _player;
+
         public override void Update(float delta)
         {
             base.Update(delta);
@@ -82,6 +84,8 @@ namespace Lesson2.Scenes
 
             EventManager.AddEventListener(EventManager.Events.ShootEvent, Shoot);
             EventManager.AddEventListener(EventManager.Events.StageCompletedEvent, OnStageCompleted);
+
+            _player = new Player();
 
             _count = 10;
 

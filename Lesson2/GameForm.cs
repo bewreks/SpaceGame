@@ -17,8 +17,6 @@ namespace Lesson2
 
         private Thread _gameThread;
 
-        private Player _player;
-
         public GameForm()
         {
 //            Logger.Init(new ConsoleLogger());
@@ -57,8 +55,6 @@ namespace Lesson2
 
             _gameThread = new Thread(Game);
             _gameThread.IsBackground = true;
-
-            _player = new Player();
 
             Shown += Start;
             Closed += End;
