@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Drawing;
-using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
 using Lesson2.Scenes;
 
-namespace Lesson2
+namespace Lesson2.Drawables
 {
     public static class GameObjectsFactory
     {

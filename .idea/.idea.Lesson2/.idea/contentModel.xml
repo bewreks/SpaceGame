@@ -17,6 +17,7 @@
             <e p="IUpdatable.cs" t="Include" />
           </e>
           <e p="Bullet.cs" t="Include" />
+          <e p="GameObjectsFactory.cs" t="Include" />
           <e p="Medic.cs" t="Include" />
           <e p="SpaceShip.cs" t="Include" />
           <e p="Star.cs" t="Include" />
@@ -32,7 +33,6 @@
           <e p="MouseMoveGameEvent.cs" t="Include" />
         </e>
         <e p="GameForm.cs" t="Include" />
-        <e p="GameObjectsFactory.cs" t="Include" />
         <e p="Lesson2.csproj" t="IncludeRecursive" />
         <e p="Loggers" t="Include">
           <e p="ConsoleLogger.cs" t="Include" />
@@ -53,6 +53,9 @@
         </e>
         <e p="States" t="Include">
           <e p="Scenes" t="Include">
+            <e p="SceneState.cs" t="Include" />
+            <e p="SceneStateLoaded.cs" t="Include" />
+            <e p="SceneStateLoading.cs" t="Include" />
             <e p="SplashSceneStates" t="Include">
               <e p="SplashSceneState.cs" t="Include" />
               <e p="SplashSceneStateEnd.cs" t="Include" />

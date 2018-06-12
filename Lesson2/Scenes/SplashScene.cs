@@ -30,7 +30,7 @@ namespace Lesson2.Scenes
             set => _nextScene = value;
         }
 
-        protected override void OnLoad()
+        public override void OnLoad()
         {
             Logger.Print("Splash scene start load");
 

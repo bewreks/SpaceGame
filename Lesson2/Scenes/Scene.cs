@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using Lesson2.Drawables.BaseObjects;
-using Lesson2.Loggers;
+using Lesson2.States.Scenes;
 using Lesson2.Threads;
 
 namespace Lesson2.Scenes
@@ -16,91 +16,56 @@ namespace Lesson2.Scenes
         private ThreadList<IUpdatable> _toUpdate;
         private ThreadList<IDrawable> _toDraw;
 
-        private bool _loaded;
+        private SceneState _state;
 
         // FPS
         private uint _count;
         private float _seconds;
         private DateTime _dateTime;
 
-        public bool Loaded => _loaded;
+        public bool Loaded => State.Loaded;
+
+        public ThreadList<IUpdatable> ToUpdate => _toUpdate;
+        public ThreadList<IDrawable> ToDraw => _toDraw;
+
+        public SceneState State
+        {
+            get => _state;
+            set => _state = value;
+        }
 
         protected Scene()
         {
             _count = 0;
             _seconds = 0;
             _dateTime = DateTime.Now;
-            _loaded = false;
 
             _toUpdate = new ThreadList<IUpdatable>();
 
             _toDraw = new ThreadList<IDrawable>();
+
+            State = new SceneStateLoading(this);
         }
 
         // Перебераем весь список, но оставляем пользователю возможность
         // переопределить метод и обновлять данные как ему надо
         public virtual void Update(float delta)
         {
-            if (!_loaded)
-            {
-                return;
-            }
-
-
-            _toUpdate.RemoveAll(DeleteIfDead);
-            try
-            {
-                _toUpdate.ForEach(updatable => updatable.Update(delta));
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex.Message);
-                Logger.Error(ex.StackTrace);
-            }
+            State.Update(delta);
         }
 
         // Перебераем весь список, но оставляем пользователю возможность
         // переопределить метод и рисовать как ему надо
         public virtual void Draw(Graphics graphics)
         {
-            if (!_loaded)
-            {
-                return;
-            }
-
-            // Пока не знаю как правильно блокировать вне потока
-            // поэтому изменение вместо коллекции отправляю массив из этой коллекции
-            _toDraw.RemoveAll(DeleteIfDead);
-            try
-            {
-                _toDraw.ForEach(drawable => drawable.Draw(graphics));
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex.Message);
-                Logger.Error(ex.StackTrace);
-            }
+            State.Draw(graphics);
         }
 
         // Нельзя вызывать Load дважды
         // Остальные методы, кроме добавления, не отработают, пока загрузка не будет завершена
         public void Load()
         {
-            if (_loaded)
-            {
-                return;
-            }
-
-            var dateTime = DateTime.Now;
-
-            _toDraw.Clear();
-            _toUpdate.Clear();
-
-            OnLoad();
-
-            Logger.Print("Scene loaded with {0:f3} seconds", (DateTime.Now - dateTime).TotalSeconds);
-
-            _loaded = true;
+            State.Load();
         }
 
         public virtual void OnShown()
@@ -144,18 +109,8 @@ namespace Lesson2.Scenes
             }
         }
 
-        private bool DeleteIfDead(IDrawable drawable)
-        {
-            return drawable is IKillable && (drawable as IKillable).IsDead;
-        }
-
-        private bool DeleteIfDead(IUpdatable updatable)
-        {
-            return updatable is IKillable && (updatable as IKillable).IsDead;
-        }
-
         // Метод создания объектов сцены
-        protected abstract void OnLoad();
+        public abstract void OnLoad();
         
     }
 }
