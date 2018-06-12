@@ -78,7 +78,7 @@ namespace Lesson2.Scenes
             _timer.Start();
         }
 
-        public override void OnLoad()
+        protected override void OnLoad()
         {
             Logger.Print("Space scene start load");
 

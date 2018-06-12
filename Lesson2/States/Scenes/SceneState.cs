@@ -1,21 +1,19 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using Lesson2.Drawables.BaseObjects;
 using Lesson2.Scenes;
+using Lesson2.Threads;
 
 namespace Lesson2.States.Scenes
 {
     public abstract class SceneState
     {
-        protected readonly Scene _scene;
-        
-        public bool Loaded => false;
+        public virtual bool IsLoaded => false;
 
-        protected SceneState(Scene scene)
-        {
-            _scene = scene;
-        }
+        public abstract void Update(float delta, ThreadList<IUpdatable> updateList);
+        public abstract void Draw(Graphics graphics, ThreadList<IDrawable> drawList);
 
-        public abstract void Update(float delta);
-        public abstract void Draw(Graphics graphics);
-        public abstract void Load();
+        public abstract SceneState Load(ThreadList<IDrawable> drawList, ThreadList<IUpdatable> updateList,
+            Action onLoad);
     }
 }

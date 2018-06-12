@@ -4,15 +4,14 @@ namespace Lesson2.States.Scenes.SplashSceneStates
 {
     public abstract class SplashSceneState
     {
-        protected readonly SplashScene _scene;
         protected float _wait;
+        public Scene Scene { get; set; }
 
-        public SplashSceneState(SplashScene scene)
+        public SplashSceneState()
         {
             _wait = 0;
-            _scene = scene;
         }
 
-        public abstract void Update(float delta);
+        public abstract SplashSceneState Update(float delta, ref float alpha);
     }
 }

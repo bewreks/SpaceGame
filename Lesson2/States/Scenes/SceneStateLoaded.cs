@@ -3,23 +3,20 @@ using System.Drawing;
 using Lesson2.Drawables.BaseObjects;
 using Lesson2.Loggers;
 using Lesson2.Scenes;
+using Lesson2.Threads;
 
 namespace Lesson2.States.Scenes
 {
     public class SceneStateLoaded : SceneState
     {
-        public SceneStateLoaded(Scene scene) : base(scene)
-        {
-            
-        }
+        public override bool IsLoaded => true;
 
-        public override void Update(float delta)
+        public override void Update(float delta, ThreadList<IUpdatable> updateList)
         {
-            
-            _scene.ToUpdate.RemoveAll(DeleteIfDead);
+            updateList.RemoveAll(DeleteIfDead);
             try
             {
-                _scene.ToUpdate.ForEach(updatable => updatable.Update(delta));
+                updateList.ForEach(updatable => updatable.Update(delta));
             }
             catch (Exception ex)
             {
@@ -28,12 +25,12 @@ namespace Lesson2.States.Scenes
             }
         }
 
-        public override void Draw(Graphics graphics)
+        public override void Draw(Graphics graphics, ThreadList<IDrawable> drawList)
         {
-            _scene.ToDraw.RemoveAll(DeleteIfDead);
+            drawList.RemoveAll(DeleteIfDead);
             try
             {
-                _scene.ToDraw.ForEach(drawable => drawable.Draw(graphics));
+                drawList.ForEach(drawable => drawable.Draw(graphics));
             }
             catch (Exception ex)
             {
@@ -42,9 +39,10 @@ namespace Lesson2.States.Scenes
             }
         }
 
-        public override void Load()
+        public override SceneState Load(ThreadList<IDrawable> drawList, ThreadList<IUpdatable> updateList,
+            Action onLoad)
         {
-            
+            return this;
         }
 
         private bool DeleteIfDead(IDrawable drawable)

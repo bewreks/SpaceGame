@@ -7,21 +7,20 @@ namespace Lesson2.States.Scenes.SplashSceneStates
     {
         private const float FadeOutTime = 2;
 
-        public SplashSceneStateStart(SplashScene scene) : base(scene)
+        public override SplashSceneState Update(float delta, ref float alpha)
         {
-        }
-
-        public override void Update(float delta)
-        {
+            SplashSceneState nextState = this;
             _wait += delta;
-            _scene.Alpha = 255 * (1 / FadeOutTime) * (FadeOutTime - _wait);
+            alpha = 255 * (1 / FadeOutTime) * (FadeOutTime - _wait);
             if (_wait >= FadeOutTime)
             {
-                _scene.State = new SplashSceneStateLoad(_scene);
-                _scene.NextScene = new SpaceScene();
-                _scene.NextScene.Load();
+                Scene = new SpaceScene();
+                Scene.Load();
+                nextState = new SplashSceneStateLoad {Scene = Scene};
                 Logger.Print("Waiting load main scene");
             }
+
+            return nextState;
         }
     }
 }

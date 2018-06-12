@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using Lesson2.Drawables.BaseObjects;
@@ -23,16 +22,7 @@ namespace Lesson2.Scenes
         private float _seconds;
         private DateTime _dateTime;
 
-        public bool Loaded => State.Loaded;
-
-        public ThreadList<IUpdatable> ToUpdate => _toUpdate;
-        public ThreadList<IDrawable> ToDraw => _toDraw;
-
-        public SceneState State
-        {
-            get => _state;
-            set => _state = value;
-        }
+        public bool IsLoaded => _state.IsLoaded;
 
         protected Scene()
         {
@@ -44,28 +34,28 @@ namespace Lesson2.Scenes
 
             _toDraw = new ThreadList<IDrawable>();
 
-            State = new SceneStateLoading(this);
+            _state = new SceneStateLoading();
         }
 
         // Перебераем весь список, но оставляем пользователю возможность
         // переопределить метод и обновлять данные как ему надо
         public virtual void Update(float delta)
         {
-            State.Update(delta);
+            _state.Update(delta, _toUpdate);
         }
 
         // Перебераем весь список, но оставляем пользователю возможность
         // переопределить метод и рисовать как ему надо
         public virtual void Draw(Graphics graphics)
         {
-            State.Draw(graphics);
+            _state.Draw(graphics, _toDraw);
         }
 
         // Нельзя вызывать Load дважды
         // Остальные методы, кроме добавления, не отработают, пока загрузка не будет завершена
         public void Load()
         {
-            State.Load();
+            _state = _state.Load(_toDraw, _toUpdate, OnLoad);
         }
 
         public virtual void OnShown()
@@ -110,7 +100,7 @@ namespace Lesson2.Scenes
         }
 
         // Метод создания объектов сцены
-        public abstract void OnLoad();
+        protected abstract void OnLoad();
         
     }
 }

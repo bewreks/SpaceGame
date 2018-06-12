@@ -1,5 +1,4 @@
 ﻿using Lesson2.Loggers;
-using Lesson2.Scenes;
 
 namespace Lesson2.States.Scenes.SplashSceneStates
 {
@@ -7,16 +6,17 @@ namespace Lesson2.States.Scenes.SplashSceneStates
     {
         private const float WaitingTime = 5;
         
-        public SplashSceneStateLoad(SplashScene scene) : base(scene){}
-        
-        public override void Update(float delta)
+        public override SplashSceneState Update(float delta, ref float alpha)
         {
+            SplashSceneState nextState = this;
             _wait += delta;
-            if (_wait >= WaitingTime && _scene.NextScene.Loaded)
+            if (_wait >= WaitingTime && Scene.IsLoaded)
             {
-                _scene.State = new SplashSceneStateEnd(_scene);
+                nextState = new SplashSceneStateEnd{Scene = Scene};
                 Logger.Print("Main scene loaded");
             }
+
+            return nextState;
         }
     }
 }
