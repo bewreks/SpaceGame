@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Drawing;
-using System.Media;
 using System.Threading;
 using System.Windows.Forms;
 using Lesson2.Events;
 using Lesson2.Loggers;
 using Lesson2.Scenes;
-using Timer = System.Windows.Forms.Timer;
 
 namespace Lesson2
 {
+    /// <summary>
+    /// Главная форма игры
+    /// Организовываем первичную настройку формы
+    /// Инициируем основные классы
+    /// Подписываемся на необходимые события 
+    /// </summary>
     public class GameForm : Form
     {
-        private Thread _updateThread;
-        private Thread _drawThread;
-
+        /// <summary>
+        /// Основной поток игры
+        /// </summary>
         private Thread _gameThread;
 
         public GameForm()
@@ -22,11 +26,8 @@ namespace Lesson2
 //            Logger.Init(new ConsoleLogger());
 //            Logger.AddLogger(new FileLogger());
 
-            Logger.Error("test");
-            Logger.Error("test {0}", 1);
-
             Logger.Print("Start form");
-            // Настройка формы
+
             Width = 800;
             Height = 600;
 
@@ -37,24 +38,7 @@ namespace Lesson2
             MaximizeBox = false;
             Logger.Print("Form created");
 
-            // Запуск потоков на Update + отрисовку
-            _updateThread = new Thread(() =>
-            {
-                while (true)
-                {
-                    Drawer.Draw();
-                }
-            });
-            _drawThread = new Thread(() =>
-            {
-                while (true)
-                {
-                    Drawer.Draw();
-                }
-            });
-
-            _gameThread = new Thread(Game);
-            _gameThread.IsBackground = true;
+            _gameThread = new Thread(Game) {IsBackground = true};
 
             Shown += Start;
             Closed += End;
@@ -62,11 +46,12 @@ namespace Lesson2
             MouseMove += OnMouseMove;
             MouseDown += OnMouseClick;
 
-            // Инициализация класса отрисовки
-            // В целом бесполезен, но так красивее и правильнее
             Drawer.Init(this);
         }
 
+        /// <summary>
+        /// Метод для потока
+        /// </summary>
         private void Game()
         {
             while (true)
@@ -76,16 +61,36 @@ namespace Lesson2
             }
         }
 
+        #region EventRegion
+        
+        /// <summary>
+        /// Метод обработки клика
+        /// Запускает событие выстрела
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnMouseClick(object sender, MouseEventArgs e)
         {
             EventManager.DispatchEvent(EventManager.Events.ShootEvent);
         }
 
+        /// <summary>
+        /// Метод обработки движения мыши
+        /// Запускает событие движения
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             EventManager.DispatchEvent(EventManager.Events.MoveEvent, new MouseMoveGameEvent(e.X, e.Y));
         }
 
+        /// <summary>
+        /// Метод обработки нажатий кнопок на клавиатуре
+        /// Запускает события движения и выстрела
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -102,23 +107,33 @@ namespace Lesson2
             }
         }
 
+        /// <summary>
+        /// Метод обработки закрытия формы
+        /// Останавливает поток игры
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void End(object sender, EventArgs e)
         {
             Logger.Print("Form closed");
-//            _drawThread.Suspend();
-//            _updateThread.Suspend();
             _gameThread.Suspend();
         }
 
+        /// <summary>
+        /// Метод обработки отображения формы
+        /// Устанавливает стартовую сцену и запускает основной поток игры
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Start(object sender, EventArgs e)
         {
             Logger.Print("Form shown");
             Drawer.SetScene(new SplashScene());
 //            Drawer.SetScene(new SpaceScene());
-//            _updateThread.Start();
-//            _drawThread.Start();
 
             _gameThread.Start();
         }
+        #endregion
+
     }
 }
