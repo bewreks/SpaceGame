@@ -3,6 +3,9 @@ using Lesson2.Loggers;
 
 namespace Lesson2
 {
+    /// <summary>
+    /// Класс игрока. 
+    /// </summary>
     public class Player
     {
         private int _hp;

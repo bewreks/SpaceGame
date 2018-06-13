@@ -19,7 +19,7 @@ namespace Lesson2
         /// <summary>
         /// Основной поток игры
         /// </summary>
-        private Thread _gameThread;
+        private readonly Thread _gameThread;
 
         public GameForm()
         {

@@ -6,8 +6,15 @@ using Lesson2.Scenes;
 
 namespace Lesson2
 {
+    
+    /// <summary>
+    /// Класс отрисовки
+    /// </summary>
     public static class Drawer
     {
+        /// <summary>
+        /// Текущая сцена
+        /// </summary>
         private static Scene _scene;
 
         private static BufferedGraphicsContext _context;
@@ -46,21 +53,24 @@ namespace Lesson2
             }
         }
 
-        // Метод установки сцены
-        // Сразу же нужно создать все объекты сцены
+        /// <summary>
+        /// Метод установки сцены
+        /// Запускает метод загрузки сцены Load
+        /// Запускает метод сцены OnShown
+        /// </summary>
+        /// <param name="scene">Объект сцены</param>
         public static void SetScene(Scene scene)
         {
-            _scene = scene;
             _scene.Load();
             _scene.OnShown();
-        }
-
-        public static void SetLoadedScene(Scene scene)
-        {
             _scene = scene;
-            _scene.OnShown();
         }
 
+        /// <summary>
+        /// Метод инициализации
+        /// Создает контекст и буфер для рисования
+        /// </summary>
+        /// <param name="form">Форма, на которой будет происходить отрисовка</param>
         public static void Init(Form form)
         {
             var g = form.CreateGraphics();
@@ -71,7 +81,10 @@ namespace Lesson2
             _dateTime = DateTime.Now;
         }
 
-        // Очитить, отрисовать сцену, если есть, отрендерить
+        /// <summary>
+        /// Метод отрисовки кадра
+        /// Очищаем предыдущий кадр, отрисовываем сцену, если она есть
+        /// </summary>
         public static void Draw()
         {
             try
@@ -90,6 +103,11 @@ namespace Lesson2
             }
         }
 
+        /// <summary>
+        /// Метод обновления
+        /// Вызывается перед отрисовкой
+        /// Используется для обновления объектов
+        /// </summary>
         public static void Update()
         {
             try
