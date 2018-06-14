@@ -8,7 +8,7 @@
         <e p="Drawables" t="Include">
           <e p="Asteroid.cs" t="Include" />
           <e p="BaseObjects" t="Include">
-            <e p="CollisionGameObjects.cs" t="Include" />
+            <e p="CollisionKillableGameObjects.cs" t="Include" />
             <e p="GameObjectException.cs" t="Include" />
             <e p="GameObjects.cs" t="Include" />
             <e p="ICollision.cs" t="Include" />

@@ -17,9 +17,9 @@ namespace Lesson2.Drawables
                 _position.Y + _size.Height);
         }
 
-        public override void Update(float totalSeconds)
+        public override void Update(float deltaTime)
         {
-            _position.X = _position.X + _dir.X * totalSeconds;
+            _position.X = _position.X + _dir.X * deltaTime;
             if (_position.X < 0) _position.X = Drawer.Width + _size.Width;
         }
     }

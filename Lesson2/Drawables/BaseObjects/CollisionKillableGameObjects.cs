@@ -2,12 +2,14 @@
 
 namespace Lesson2.Drawables.BaseObjects
 {
-    // Класс для игровых объектов с коллизией
-    public abstract class CollisionGameObjects : GameObjects, ICollision, IKillable
+    /// <summary>
+    /// Класс для убиваемых игровых объектов с коллизией 
+    /// </summary>
+    public abstract class CollisionKillableGameObjects : GameObjects, ICollision, IKillable
     {
         public Rectangle Rect => new Rectangle(new Point((int) _position.X, (int) _position.Y), _size);
 
-        protected CollisionGameObjects(Point position, Point dir, Size size) : base(position, dir, size)
+        protected CollisionKillableGameObjects(Point position, Point dir, Size size) : base(position, dir, size)
         {
         }
 
@@ -23,7 +25,6 @@ namespace Lesson2.Drawables.BaseObjects
             return intersectsWith;
         }
 
-        // Метод, который вызовется у обоих объектов при коллизии
         public abstract void OnCollision(ICollision obj);
 
         public bool IsDead => false;

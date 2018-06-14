@@ -3,7 +3,7 @@ using Lesson2.Drawables.BaseObjects;
 
 namespace Lesson2.Drawables
 {
-    public class Asteroid : CollisionGameObjects
+    public class Asteroid : CollisionKillableGameObjects
     {
         private bool _isDead;
 
@@ -26,11 +26,11 @@ namespace Lesson2.Drawables
             graphics.FillEllipse(Brushes.White, _position.X, _position.Y, _size.Width, _size.Height);
         }
 
-        public override void Update(float totalSeconds)
+        public override void Update(float deltaTime)
         {
             if (IsDead) return;
 
-            _position.X = _position.X + _dir.X * totalSeconds;
+            _position.X = _position.X + _dir.X * deltaTime;
             if (_position.X < 0)
             {
                 // Потом можно отнимать счет за пропущенные астероиды

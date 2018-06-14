@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drawables\Asteroid.cs" />
-    <Compile Include="Drawables\BaseObjects\CollisionGameObjects.cs" />
+    <Compile Include="Drawables\BaseObjects\CollisionKillableGameObjects.cs" />
     <Compile Include="Drawables\BaseObjects\GameObjectException.cs" />
     <Compile Include="Drawables\BaseObjects\GameObjects.cs" />
     <Compile Include="Drawables\BaseObjects\ICollision.cs" />

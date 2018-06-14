@@ -8,7 +8,7 @@ using Lesson2.Loggers;
 
 namespace Lesson2.Scenes
 {
-    public class SpaceShip : CollisionGameObjects
+    public class SpaceShip : CollisionKillableGameObjects
     {
         private GraphicsPath _graphicsPath;
         private float _scaleX;
@@ -94,7 +94,7 @@ namespace Lesson2.Scenes
             }
         }
 
-        public override void Update(float totalSeconds)
+        public override void Update(float deltaTime)
         {
         }
 

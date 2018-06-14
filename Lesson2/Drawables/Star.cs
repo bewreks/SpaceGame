@@ -37,20 +37,20 @@ namespace Lesson2.Drawables
             }
         }
 
-        public override void Update(float totalSeconds)
+        public override void Update(float deltaTime)
         {
             lock (_graphicsPath)
             {
                 var matrix = new Matrix();
-                _position.X = _position.X + _dir.X * totalSeconds;
+                _position.X = _position.X + _dir.X * deltaTime;
                 if (_position.X < 0)
                 {
                     _position.X = Drawer.Width + _size.Width;
-                    matrix.Translate(Drawer.Width + _size.Width, _dir.Y * totalSeconds);
+                    matrix.Translate(Drawer.Width + _size.Width, _dir.Y * deltaTime);
                 }
                 else
                 {
-                    matrix.Translate(_dir.X * totalSeconds, _dir.Y * totalSeconds);
+                    matrix.Translate(_dir.X * deltaTime, _dir.Y * deltaTime);
                 }
 
                 _graphicsPath.Transform(matrix);

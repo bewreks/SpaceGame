@@ -3,9 +3,10 @@ using System.Drawing;
 
 namespace Lesson2.Drawables.BaseObjects
 {
-    // Базовый класс игрового объекта
-    // Потомки должны реализовать методы отрисовки и обновления данных
-    // Для объектов с коллизией нужно использовать класс CollisionGameObjects
+    /// <summary>
+    /// Базовый класс игрового объекта
+    /// Требует от потомков реализацию интерфейсов IDrawable и IUpdatable
+    /// </summary>
     public abstract class GameObjects : IDrawable, IUpdatable
     {
         protected PointF _position;
@@ -47,6 +48,6 @@ namespace Lesson2.Drawables.BaseObjects
         }
 
         public abstract void Draw(Graphics graphics);
-        public abstract void Update(float totalSeconds);
+        public abstract void Update(float deltaTime);
     }
 }

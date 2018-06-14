@@ -6,7 +6,7 @@ using Lesson2.Loggers;
 
 namespace Lesson2.Drawables
 {
-    public class Bullet : CollisionGameObjects
+    public class Bullet : CollisionKillableGameObjects
     {
         private readonly Random _random = new Random();
 
@@ -25,11 +25,11 @@ namespace Lesson2.Drawables
             graphics.DrawRectangle(Pens.OrangeRed, _position.X, _position.Y, _size.Width, _size.Height);
         }
 
-        public override void Update(float totalSeconds)
+        public override void Update(float deltaTime)
         {
             if (IsDead) return;
 
-            _position.X = _position.X + _dir.X * totalSeconds;
+            _position.X = _position.X + _dir.X * deltaTime;
             if (_position.X >= Drawer.Width)
             {
                 _isDead = true;
