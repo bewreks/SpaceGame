@@ -7,6 +7,9 @@ using Lesson2.Threads;
 
 namespace Lesson2.States.Scenes
 {
+    /// <summary>
+    /// Класс состояния полной загрузки сцены
+    /// </summary>
     public class SceneStateLoaded : SceneState
     {
         public override bool IsLoaded => true;

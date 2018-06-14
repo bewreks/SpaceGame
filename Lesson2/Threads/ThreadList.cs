@@ -4,6 +4,10 @@ using System.Threading;
 
 namespace Lesson2.Threads
 {
+    /// <summary>
+    /// Класс потокобезопасного списка
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ThreadList<T>
     {
         private ReaderWriterLockSlim _cacheLock = new ReaderWriterLockSlim();
@@ -19,6 +23,10 @@ namespace Lesson2.Threads
             _cacheLock.Dispose();
         }
 
+        /// <summary>
+        /// Удаление из списка всех объектов, подходящих под установленные параметры
+        /// </summary>
+        /// <param name="match"></param>
         public void RemoveAll(Predicate<T> match)
         {
             _cacheLock.EnterWriteLock();
@@ -32,6 +40,10 @@ namespace Lesson2.Threads
             }
         }
 
+        /// <summary>
+        /// Добавление объекта в список
+        /// </summary>
+        /// <param name="obj"></param>
         public void Add(T obj)
         {
             _cacheLock.EnterWriteLock();
@@ -45,6 +57,10 @@ namespace Lesson2.Threads
             }
         }
 
+        /// <summary>
+        /// Добавление коллекции объектов в список
+        /// </summary>
+        /// <param name="collection"></param>
         public void Add(IEnumerable<T> collection)
         {
             _cacheLock.EnterWriteLock();
@@ -58,6 +74,9 @@ namespace Lesson2.Threads
             }
         }
 
+        /// <summary>
+        /// Удаление всех объектов из списка
+        /// </summary>
         public void Clear()
         {
             _cacheLock.EnterWriteLock();
@@ -71,6 +90,10 @@ namespace Lesson2.Threads
             }
         }
 
+        /// <summary>
+        /// Применение делегата ко всем объектам списка 
+        /// </summary>
+        /// <param name="action"></param>
         public void ForEach(Action<T> action)
         {
             _cacheLock.EnterReadLock();
@@ -84,6 +107,10 @@ namespace Lesson2.Threads
             }
         }
 
+        /// <summary>
+        /// Удаление объекта из списка
+        /// </summary>
+        /// <param name="obj"></param>
         public void Remove(T obj)
         {
             _cacheLock.EnterWriteLock();

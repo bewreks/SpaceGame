@@ -2,11 +2,13 @@
 using System.Drawing;
 using Lesson2.Drawables.BaseObjects;
 using Lesson2.Loggers;
-using Lesson2.Scenes;
 using Lesson2.Threads;
 
 namespace Lesson2.States.Scenes
 {
+    /// <summary>
+    /// Класс состояния загрузки сцены
+    /// </summary>
     public class SceneStateLoading : SceneState
     {
         public override void Update(float delta, ThreadList<IUpdatable> updateList)

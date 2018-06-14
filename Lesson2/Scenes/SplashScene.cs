@@ -22,7 +22,7 @@ namespace Lesson2.Scenes
             AddDrawable(new TextBox(new Point(230, 200), "Space Game", new Font("Arial", 40), Brushes.White));
             AddDrawable(new TextBox(new Point(570, 540), "Соколовский Дмитрий", new Font("Arial", 14), Brushes.White));
 
-            _state = new SplashSceneStateStart();
+            _state = new SplashSceneStateStart(null);
         }
 
         // Отрисуем сцену, а поверх нарисуем еще квадрат с альфой для симуляции эффекта Fade

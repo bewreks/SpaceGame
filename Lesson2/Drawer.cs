@@ -61,8 +61,8 @@ namespace Lesson2
         /// <param name="scene">Объект сцены</param>
         public static void SetScene(Scene scene)
         {
-            _scene.Load();
-            _scene.OnShown();
+            scene.Load();
+            scene.OnShown();
             _scene = scene;
         }
 

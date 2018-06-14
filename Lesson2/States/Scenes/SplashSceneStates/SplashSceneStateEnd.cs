@@ -1,8 +1,14 @@
-﻿namespace Lesson2.States.Scenes.SplashSceneStates
+﻿using Lesson2.Scenes;
+
+namespace Lesson2.States.Scenes.SplashSceneStates
 {
     public class SplashSceneStateEnd : SplashSceneState
     {
         private const float FadeInTime = 2;
+
+        public SplashSceneStateEnd(Scene scene) : base(scene)
+        {
+        }
 
         public override SplashSceneState Update(float delta, ref float alpha)
         {
@@ -11,10 +17,11 @@
             alpha = 255 * (1 / FadeInTime) * _wait;
             if (_wait >= FadeInTime)
             {
-                Drawer.SetScene(Scene);
+                Drawer.SetScene(_scene);
             }
 
             return nextState;
         }
+
     }
 }
