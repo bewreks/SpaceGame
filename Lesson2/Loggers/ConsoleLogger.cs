@@ -2,6 +2,9 @@
 
 namespace Lesson2.Loggers
 {
+    /// <summary>
+    /// Класс логгера для записи в консоль
+    /// </summary>
     public class ConsoleLogger : ILogger
     {
         public void Print(string message)

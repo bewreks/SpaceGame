@@ -3,6 +3,9 @@
 namespace Lesson2.Loggers
 {
     //TODO: переписать на более производительный вид
+    /// <summary>
+    /// Класс логгера для записи в файл
+    /// </summary>
     public class FileLogger : ILogger
     {
         private StreamWriter _mainLog;
