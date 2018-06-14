@@ -22,14 +22,16 @@ namespace Lesson2.States.Scenes
         /// </summary>
         /// <param name="delta">Дельта времени между кадрами</param>
         /// <param name="updateList">Список для обновления</param>
-        public abstract void Update(float delta, ThreadList<IUpdatable> updateList);
-        
+        /// <param name="onUpdate">Пользовательский делегат обновления</param>
+        public abstract void Update(float delta, ThreadList<IUpdatable> updateList, Action<float> onUpdate);
+
         /// <summary>
         /// Метод отрисовки списка
         /// </summary>
         /// <param name="graphics">Объект, куда происходит рисование</param>
         /// <param name="drawList">Список для рисования</param>
-        public abstract void Draw(Graphics graphics, ThreadList<IDrawable> drawList);
+        /// <param name="onDraw">Пользовательский делегат отрисовки</param>
+        public abstract void Draw(Graphics graphics, ThreadList<IDrawable> drawList, Action<Graphics> onDraw);
 
         /// <summary>
         /// Метод загрузки сцены

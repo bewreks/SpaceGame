@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
@@ -19,6 +20,7 @@ namespace Lesson2.Scenes
         private ThreadList<Medic> _medics = new ThreadList<Medic>();
 
         private SpaceShip _ship;
+        
         private Timer _timer;
         private int _count;
 
@@ -26,10 +28,8 @@ namespace Lesson2.Scenes
 
         private Player _player;
 
-        public override void Update(float delta)
+        protected override void OnUpdate(float delta)
         {
-            base.Update(delta);
-            
             try
             {
                 _asteroids.ForEach(asteroid => asteroid.Collision(_ship));
@@ -153,6 +153,11 @@ namespace Lesson2.Scenes
                 _waiting = false;
             };
             timer.Start();
+        }
+
+        protected override void OnDraw(Graphics graphics)
+        {
+            
         }
 
         // TODO: добавить отграничение скорострельность

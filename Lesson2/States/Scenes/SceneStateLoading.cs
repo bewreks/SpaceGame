@@ -11,11 +11,11 @@ namespace Lesson2.States.Scenes
     /// </summary>
     public class SceneStateLoading : SceneState
     {
-        public override void Update(float delta, ThreadList<IUpdatable> updateList)
+        public override void Update(float delta, ThreadList<IUpdatable> updateList, Action<float> onUpdate)
         {
         }
 
-        public override void Draw(Graphics graphics, ThreadList<IDrawable> drawList)
+        public override void Draw(Graphics graphics, ThreadList<IDrawable> drawList, Action<Graphics> onDraw)
         {
         }
 

@@ -7,11 +7,17 @@ namespace Lesson2.Scenes
 {
     public class SplashScene : Scene
     {
+        /// <summary>
+        /// Альфа канал для Fade эффекта
+        /// </summary>
         private float _alpha;
 
-        private Scene _nextScene;
-
         private SplashSceneState _state;
+
+        public override void OnShown()
+        {
+            
+        }
 
         protected override void OnLoad()
         {
@@ -25,16 +31,13 @@ namespace Lesson2.Scenes
             _state = new SplashSceneStateStart(null);
         }
 
-        // Отрисуем сцену, а поверх нарисуем еще квадрат с альфой для симуляции эффекта Fade
-        public override void Draw(Graphics graphics)
+        protected override void OnDraw(Graphics graphics)
         {
-            base.Draw(graphics);
-
             graphics.FillRectangle(new SolidBrush(Color.FromArgb((int) _alpha, Color.Black)), 0, 0, Drawer.Width,
                 Drawer.Height);
         }
 
-        public override void Update(float delta)
+        protected override void OnUpdate(float delta)
         {
             _state = _state.Update(delta, ref _alpha);
         }

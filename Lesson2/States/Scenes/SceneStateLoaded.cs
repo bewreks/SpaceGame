@@ -14,7 +14,7 @@ namespace Lesson2.States.Scenes
     {
         public override bool IsLoaded => true;
 
-        public override void Update(float delta, ThreadList<IUpdatable> updateList)
+        public override void Update(float delta, ThreadList<IUpdatable> updateList, Action<float> onUpdate)
         {
             updateList.RemoveAll(DeleteIfDead);
             try
@@ -26,9 +26,11 @@ namespace Lesson2.States.Scenes
                 Logger.Error(ex.Message);
                 Logger.Error(ex.StackTrace);
             }
+
+            onUpdate(delta);
         }
 
-        public override void Draw(Graphics graphics, ThreadList<IDrawable> drawList)
+        public override void Draw(Graphics graphics, ThreadList<IDrawable> drawList, Action<Graphics> onDraw)
         {
             drawList.RemoveAll(DeleteIfDead);
             try
@@ -40,6 +42,8 @@ namespace Lesson2.States.Scenes
                 Logger.Error(ex.Message);
                 Logger.Error(ex.StackTrace);
             }
+
+            onDraw(graphics);
         }
 
         public override SceneState Load(ThreadList<IDrawable> drawList, ThreadList<IUpdatable> updateList,
