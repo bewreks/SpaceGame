@@ -1,15 +1,15 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
+using System.Media;
 using Lesson2.Drawables.BaseObjects;
 using Lesson2.Events;
-using Lesson2.Loggers;
 
 namespace Lesson2.Drawables
 {
+    /// <summary>
+    /// Базовый объект пули
+    /// </summary>
     public class Bullet : CollisionKillableGameObjects
     {
-        private readonly Random _random = new Random();
-
         private bool _isDead;
 
         public bool IsDead => _isDead;
@@ -44,7 +44,7 @@ namespace Lesson2.Drawables
             {
                 EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
                     new ChangeScoreEvent((obj as Asteroid).Score));
-                System.Media.SystemSounds.Hand.Play();
+                SystemSounds.Hand.Play();
             }
         }
     }

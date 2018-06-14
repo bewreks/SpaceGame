@@ -3,6 +3,9 @@ using Lesson2.Drawables.BaseObjects;
 
 namespace Lesson2.Drawables
 {
+    /// <summary>
+    /// Класс четырехконечной звезды
+    /// </summary>
     public class XStar : GameObjects
     {
         public XStar(Point position, Point dir, Size size) : base(position, dir, size)

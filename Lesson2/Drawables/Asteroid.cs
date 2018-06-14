@@ -3,13 +3,24 @@ using Lesson2.Drawables.BaseObjects;
 
 namespace Lesson2.Drawables
 {
+    /// <summary>
+    /// Класс астероида
+    /// Базовый противник
+    /// </summary>
     public class Asteroid : CollisionKillableGameObjects
     {
         private bool _isDead;
 
         public bool IsDead => _isDead;
 
+        /// <summary>
+        /// Количество энергии, отбираемой у пользователя
+        /// </summary>
         public int Energy { get; }
+        
+        /// <summary>
+        /// Количество очков за убийство противника
+        /// </summary>
         public int Score { get; }
 
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)

@@ -1,25 +1,23 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
 using Lesson2.Events;
-using Lesson2.Loggers;
 
-namespace Lesson2.Scenes
+namespace Lesson2.Drawables
 {
+    /// <summary>
+    /// Класс космического корабля пользователя
+    /// </summary>
     public class SpaceShip : CollisionKillableGameObjects
     {
-        private GraphicsPath _graphicsPath;
-        private float _scaleX;
-        private float _scaleY;
+        private readonly GraphicsPath _graphicsPath;
 
         private MouseMoveGameEvent _prEventArgs;
 
         public SpaceShip(Point position, Point dir, Size size) : base(position, dir, size)
         {
-            _scaleX = _size.Width / 6.0f;
-            _scaleY = _size.Height / 4.0f;
+            var scaleX = _size.Width / 6.0f;
+            var scaleY = _size.Height / 4.0f;
 
             _graphicsPath = new GraphicsPath();
             _graphicsPath.AddLine(0, 2, 6, 0);
@@ -27,7 +25,7 @@ namespace Lesson2.Scenes
 
             var matrix = new Matrix();
             matrix.Translate(_position.X, _position.Y);
-            matrix.Scale(_scaleX, _scaleY);
+            matrix.Scale(scaleX, scaleY);
             _graphicsPath.Transform(matrix);
 
             // Оставлю возможность управления с клавиатуры
@@ -36,12 +34,16 @@ namespace Lesson2.Scenes
             EventManager.AddEventListener(EventManager.Events.MoveEvent, Move);
         }
 
+        /// <summary>
+        /// Обработчик события движения мышью
+        /// </summary>
+        /// <param name="args"></param>
         private void Move(IEventArgs args)
         {
             lock (_graphicsPath)
             {
                 var arg = args as MouseMoveGameEvent;
-                float i = arg.Y - (_prEventArgs?.Y ?? 0);
+                float i = arg?.Y ?? 0 - (_prEventArgs?.Y ?? 0);
                 _prEventArgs = arg;
 
                 _position.Y = _position.Y + i;
@@ -52,6 +54,10 @@ namespace Lesson2.Scenes
             }
         }
 
+        /// <summary>
+        /// Обработчик события нажатия кнопки вниз
+        /// </summary>
+        /// <param name="args"></param>
         private void Down(IEventArgs args)
         {
             lock (_graphicsPath)
@@ -69,6 +75,10 @@ namespace Lesson2.Scenes
             }
         }
 
+        /// <summary>
+        /// Обработчик события нажатия кнопки вверх
+        /// </summary>
+        /// <param name="args"></param>
         private void Up(IEventArgs args)
         {
             lock (_graphicsPath)
@@ -105,20 +115,24 @@ namespace Lesson2.Scenes
             {
                 case Asteroid _:
                     EventManager.DispatchEvent(EventManager.Events.ChangeEnergyEvent,
-                        new ChangeScoreEvent(-(obj as Asteroid).Energy));
+                        new ChangeScoreEvent(-((Asteroid) obj).Energy));
                     EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
-                        new ChangeScoreEvent(-(obj as Asteroid).Score));
+                        new ChangeScoreEvent(-((Asteroid) obj).Score));
                     break;
 
                 case Medic _:
                     EventManager.DispatchEvent(EventManager.Events.ChangeEnergyEvent,
-                        new ChangeScoreEvent((obj as Medic).Energy));
+                        new ChangeScoreEvent(((Medic) obj).Energy));
                     EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
-                        new ChangeScoreEvent((obj as Medic).Score));
+                        new ChangeScoreEvent(((Medic) obj).Score));
                     break;
             }
         }
 
+        /// <summary>
+        /// Расположение пушки на корабле
+        /// </summary>
+        /// <returns></returns>
         public PointF GetPoint()
         {
             return _graphicsPath.PathPoints[1];

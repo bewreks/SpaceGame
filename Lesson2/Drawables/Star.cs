@@ -4,15 +4,16 @@ using Lesson2.Drawables.BaseObjects;
 
 namespace Lesson2.Drawables
 {
+    /// <summary>
+    /// Класс пятиконечной звезды
+    /// </summary>
     public class Star : GameObjects
     {
-        private float _scale;
-        
-        private GraphicsPath _graphicsPath;
+        private readonly GraphicsPath _graphicsPath;
 
         public Star(Point position, Point direction, Size size) : base(position, direction, size)
         {
-            _scale = _size.Width / 3.0f;
+            var scale = _size.Width / 3.0f;
 
             _graphicsPath = new GraphicsPath();
             _graphicsPath.AddLine(0, 3, 2, -3);
@@ -23,7 +24,7 @@ namespace Lesson2.Drawables
 
             var matrix = new Matrix();
             matrix.Translate(_position.X, _position.Y);
-            matrix.Scale(_scale, -_scale);
+            matrix.Scale(scale, -scale);
             
             _graphicsPath.Transform(matrix);
             _graphicsPath.FillMode = FillMode.Winding;

@@ -3,6 +3,9 @@ using Lesson2.Drawables.BaseObjects;
 
 namespace Lesson2.Drawables
 {
+    /// <summary>
+    /// Класс простого отображения текста
+    /// </summary>
     public class TextBox : GameObjects
     {
         private string _text;

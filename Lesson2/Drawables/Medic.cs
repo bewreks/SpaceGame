@@ -3,13 +3,23 @@ using Lesson2.Drawables.BaseObjects;
 
 namespace Lesson2.Drawables
 {
+    /// <summary>
+    /// Базовый объект аптечки
+    /// </summary>
     public class Medic : CollisionKillableGameObjects
     {
         private bool _isDead;
 
         public bool IsDead => _isDead;
-
+        
+        /// <summary>
+        /// Количество энергии, даваемой пользователю
+        /// </summary>
         public int Energy { get; }
+        
+        /// <summary>
+        /// Количество очков за подбор аптечки
+        /// </summary>
         public int Score { get; }
 
         public Medic(Point position, Point dir, Size size) : base(position, dir, size)
