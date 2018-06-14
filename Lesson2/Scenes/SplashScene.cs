@@ -5,6 +5,10 @@ using Lesson2.States.Scenes.SplashSceneStates;
 
 namespace Lesson2.Scenes
 {
+    /// <summary>
+    /// Сцена сплеш экрана
+    /// Появляется в начале, загружает основную сцену игры и выключается
+    /// </summary>
     public class SplashScene : Scene
     {
         /// <summary>

@@ -10,22 +10,64 @@ using Lesson2.Threads;
 
 namespace Lesson2.Scenes
 {
+    /// <summary>
+    /// Основная сцена игры
+    /// </summary>
     public class SpaceScene : Scene
     {
+        /// <summary>
+        /// Список звезд
+        /// Создается единожды во время загрузки и больше не меняется
+        /// </summary>
         private List<GameObjects> _stars = new List<GameObjects>();
+        
+        /// <summary>
+        /// Очередь игровых объектов которые появляются
+        /// </summary>
         private Queue<GameObjects> _objects = new Queue<GameObjects>();
 
+        /// <summary>
+        /// Список астероидов
+        /// Пополняется и удаляется на лету, поэтому используется потокобезопасный список
+        /// </summary>
         private ThreadList<Asteroid> _asteroids = new ThreadList<Asteroid>();
+
+        /// <summary>
+        /// Список пуль
+        /// Пополняется и удаляется на лету, поэтому используется потокобезопасный список
+        /// </summary>
         private ThreadList<Bullet> _bullets = new ThreadList<Bullet>();
+        
+        /// <summary>
+        /// Список аптечек
+        /// Пополняется и удаляется на лету, поэтому используется потокобезопасный список
+        /// </summary>
         private ThreadList<Medic> _medics = new ThreadList<Medic>();
 
+        /// <summary>
+        /// Коспический корабль игрока
+        /// </summary>
         private SpaceShip _ship;
         
+        /// <summary>
+        /// Основной таймер игры
+        /// </summary>
         private Timer _timer;
+        
+        /// <summary>
+        /// Количество объектов в волне
+        /// </summary>
         private int _count;
 
+        /// <summary>
+        /// Флаг определения, что событие о новой волне отправлено
+        /// </summary>
         private bool _waiting = false;
 
+        /// <summary>
+        /// Объект игрока
+        /// Пока не используется
+        /// </summary>
         private Player _player;
 
         protected override void OnUpdate(float delta)
@@ -141,6 +183,10 @@ namespace Lesson2.Scenes
             LoadQueue();
         }
 
+        /// <summary>
+        /// Обработчик события окончания волны
+        /// </summary>
+        /// <param name="arg"></param>
         private void OnStageCompleted(IEventArgs arg)
         {
             _timer.Stop();
@@ -161,6 +207,10 @@ namespace Lesson2.Scenes
         }
 
         // TODO: добавить отграничение скорострельность
+        /// <summary>
+        /// Обработчик события выстрела
+        /// </summary>
+        /// <param name="args"></param>
         private void Shoot(IEventArgs args)
         {
             var bullet = GameObjectsFactory.CreateBullet(_ship.GetPoint());
@@ -168,6 +218,9 @@ namespace Lesson2.Scenes
             AddDrawable(bullet);
         }
 
+        /// <summary>
+        /// Метод генерации новой волны
+        /// </summary>
         private void LoadQueue()
         {
             var random = new Random();
