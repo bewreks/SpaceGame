@@ -13,6 +13,8 @@ namespace Lesson2.Drawables
         private readonly GraphicsPath _graphicsPath;
 
         private MouseMoveGameEvent _prEventArgs;
+        
+        public override Rectangle Rect => new Rectangle(new Point((int) _position.X, (int) (_position.Y - _size.Height/2.0f)), _size);
 
         public SpaceShip(Point position, Point dir, Size size) : base(position, dir, size)
         {
@@ -43,7 +45,7 @@ namespace Lesson2.Drawables
             lock (_graphicsPath)
             {
                 var arg = args as MouseMoveGameEvent;
-                float i = arg?.Y ?? 0 - (_prEventArgs?.Y ?? 0);
+                float i = (arg?.Y ?? 0) - (_prEventArgs?.Y ?? 0);
                 _prEventArgs = arg;
 
                 _position.Y = _position.Y + i;

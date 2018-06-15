@@ -7,7 +7,7 @@ namespace Lesson2.Drawables.BaseObjects
     /// </summary>
     public abstract class CollisionKillableGameObjects : GameObjects, ICollision, IKillable
     {
-        public Rectangle Rect => new Rectangle(new Point((int) _position.X, (int) _position.Y), _size);
+        public virtual Rectangle Rect => new Rectangle(new Point((int) _position.X, (int) _position.Y), _size);
 
         protected CollisionKillableGameObjects(Point position, Point dir, Size size) : base(position, dir, size)
         {
