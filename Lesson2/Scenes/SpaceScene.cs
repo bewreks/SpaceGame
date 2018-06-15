@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
+using System.Timers;
 using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
 using Lesson2.Events;
@@ -62,7 +62,7 @@ namespace Lesson2.Scenes
         /// <summary>
         /// Флаг определения, что событие о новой волне отправлено
         /// </summary>
-        private bool _waiting = false;
+        private StageCompleteState _stageCompleteState;
 
         /// <summary>
         /// Объект игрока
@@ -126,6 +126,8 @@ namespace Lesson2.Scenes
 
             EventManager.AddEventListener(EventManager.Events.ShootEvent, Shoot);
             EventManager.AddEventListener(EventManager.Events.StageCompletedEvent, OnStageCompleted);
+            
+            _stageCompleteState = new StageCompleteDispatchState();
 
             _player = new Player();
 
@@ -146,34 +148,7 @@ namespace Lesson2.Scenes
 
             _timer = new Timer();
             _timer.Interval = 1000;
-            _timer.Tick += (sender, args) =>
-            {
-                if (_objects.Count == 0)
-                {
-                    if (!_waiting)
-                    {
-                        _waiting = true;
-                        EventManager.DispatchEvent(EventManager.Events.StageCompletedEvent);
-                    }
-
-                    return;
-                }
-                
-                var obj = _objects.Dequeue();
-                switch (obj)
-                {
-                    case Asteroid _:
-                        _asteroids.Add(obj as Asteroid);
-                        AddUpdatable(obj);
-                        break;
-                    case Medic _:
-                        _medics.Add(obj as Medic);
-                        break;
-                }
-
-                AddDrawable(obj);
-                
-            };
+            _timer.Elapsed += TimerOnTick;
 
             AddDrawable(_stars);
             AddDrawable(_ship);
@@ -181,6 +156,30 @@ namespace Lesson2.Scenes
             AddUpdatable(_stars);
             
             LoadQueue();
+        }
+
+        private void TimerOnTick(object sender, EventArgs e)
+        {
+            if (_objects.Count == 0)
+            {
+                _stageCompleteState = _stageCompleteState.DoDispatch();
+
+                return;
+            }
+                
+            var obj = _objects.Dequeue();
+            switch (obj)
+            {
+                case Asteroid _:
+                    _asteroids.Add(obj as Asteroid);
+                    AddUpdatable(obj);
+                    break;
+                case Medic _:
+                    _medics.Add(obj as Medic);
+                    break;
+            }
+
+            AddDrawable(obj);
         }
 
         /// <summary>
@@ -191,12 +190,12 @@ namespace Lesson2.Scenes
         {
             _timer.Stop();
             var timer = new Timer {Interval = 5000};
-            timer.Tick += (sender, args) =>
+            timer.Elapsed += (sender, args) =>
             {
                 timer.Stop();
                 LoadQueue();
                 _timer.Start();
-                _waiting = false;
+                _stageCompleteState = new StageCompleteDispatchState();
             };
             timer.Start();
         }
@@ -242,5 +241,40 @@ namespace Lesson2.Scenes
             _count++;
         }
         
+    }
+
+    /// <summary>
+    /// Состояние для запуска окончания волны
+    /// </summary>
+    public class StageCompleteDispatchState : StageCompleteState
+    {
+        public override StageCompleteState DoDispatch()
+        {
+            EventManager.DispatchEvent(EventManager.Events.StageCompletedEvent);
+            return new StageCompleteDispatchedState();
+        }
+    }
+
+    /// <summary>
+    /// Состояние после запуска события окончания волны
+    /// </summary>
+    public class StageCompleteDispatchedState : StageCompleteState
+    {
+        public override StageCompleteState DoDispatch()
+        {
+            return this;
+        }
+    }
+
+    /// <summary>
+    /// Базовый класс состояния прохождения волны
+    /// </summary>
+    public abstract class StageCompleteState
+    {
+        /// <summary>
+        /// Запуск события окончания волны
+        /// </summary>
+        /// <returns></returns>
+        public abstract StageCompleteState DoDispatch();
     }
 }
