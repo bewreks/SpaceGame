@@ -126,9 +126,10 @@ namespace Lesson2.Scenes
 
             EventManager.AddEventListener(EventManager.Events.ShootEvent, Shoot);
             EventManager.AddEventListener(EventManager.Events.StageCompletedEvent, OnStageCompleted);
+            EventManager.AddEventListener(EventManager.Events.StageGeneratedEvent, OnStageGenerated);
             
             _stageCompleteState = new StageCompleteDispatchState();
-
+            
             _player = new Player();
 
             _count = 10;
@@ -194,10 +195,15 @@ namespace Lesson2.Scenes
             {
                 timer.Stop();
                 LoadQueue();
-                _timer.Start();
-                _stageCompleteState = new StageCompleteDispatchState();
+                EventManager.DispatchEvent(EventManager.Events.StageGeneratedEvent);
             };
             timer.Start();
+        }
+
+        private void OnStageGenerated(IEventArgs args)
+        {
+            _timer.Start();
+            _stageCompleteState = new StageCompleteDispatchState();
         }
 
         protected override void OnDraw(Graphics graphics)
