@@ -58,6 +58,7 @@
     <Compile Include="Drawer.cs" />
     <Compile Include="Events\ChangeScoreEvent.cs" />
     <Compile Include="Events\EventManager.cs" />
+    <Compile Include="Events\GameEndEventArgs.cs" />
     <Compile Include="Events\GameEventArgs.cs" />
     <Compile Include="Events\IEventArgs.cs" />
     <Compile Include="Events\MouseMoveGameEvent.cs" />

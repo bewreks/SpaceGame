@@ -47,7 +47,11 @@ namespace Lesson2.Events
             /// <summary>
             /// Событие появления нового объекта волны
             /// </summary>
-            WaveNextObjectEvent
+            WaveNextObjectEvent,
+            /// <summary>
+            /// Событие окончания игры
+            /// </summary>
+            GameEndEvent
         }
 
         public delegate void EventFunc(IEventArgs args);

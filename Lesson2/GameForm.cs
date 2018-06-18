@@ -23,7 +23,7 @@ namespace Lesson2
 
         public GameForm()
         {
-//            Logger.Init(new ConsoleLogger());
+            Logger.AddLogger(new ConsoleLogger());
 //            Logger.AddLogger(new FileLogger());
 
             Logger.Print("Start form");
@@ -45,6 +45,12 @@ namespace Lesson2
             KeyDown += OnKeyDown;
             MouseMove += OnMouseMove;
             MouseDown += OnMouseClick;
+            
+            EventManager.AddEventListener(EventManager.Events.GameEndEvent, args =>
+            {
+                Drawer.SetScene(new SplashScene());
+                Logger.Print("Игра окончена со счетом {0} на {1} волне", (args as GameEndEventArgs).Score, (args as GameEndEventArgs).Wave);
+            });
 
             Drawer.Init(this);
         }

@@ -116,17 +116,17 @@ namespace Lesson2.Drawables
             switch (obj)
             {
                 case Asteroid _:
-                    EventManager.DispatchEvent(EventManager.Events.ChangeEnergyEvent,
-                        new ChangeScoreEvent(-((Asteroid) obj).Energy));
                     EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
                         new ChangeScoreEvent(-((Asteroid) obj).Score));
+                    EventManager.DispatchEvent(EventManager.Events.ChangeEnergyEvent,
+                        new ChangeScoreEvent(-((Asteroid) obj).Energy));
                     break;
 
                 case Medic _:
+                    EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
+                        new ChangeScoreEvent(((Medic) obj).Score));////////
                     EventManager.DispatchEvent(EventManager.Events.ChangeEnergyEvent,
                         new ChangeScoreEvent(((Medic) obj).Energy));
-                    EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
-                        new ChangeScoreEvent(((Medic) obj).Score));
                     break;
             }
         }

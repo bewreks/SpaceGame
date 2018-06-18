@@ -10,9 +10,11 @@ namespace Lesson2
     {
         private int _hp;
         private int _score;
+        private int _wave;
 
         public int Hp => _hp;
         public int Score => _score;
+        public int Wave => _wave;
 
         public Player()
         {
@@ -27,6 +29,10 @@ namespace Lesson2
         {
             _hp += (args as ChangeScoreEvent)?.Score??0;
             Logger.Print("HP: {0}", Hp);
+            if (_hp <= 0)
+            {
+                EventManager.DispatchEvent(EventManager.Events.GameEndEvent, new GameEndEventArgs(_score, _wave));
+            }
         }
 
         private void OnChangeScore(IEventArgs args)
