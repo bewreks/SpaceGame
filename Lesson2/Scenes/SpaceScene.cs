@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Timers;
 using Lesson2.Drawables;
 using Lesson2.Drawables.BaseObjects;
 using Lesson2.Events;
 using Lesson2.Loggers;
+using Lesson2.States.Scenes.SpaceSceneStates;
 using Lesson2.Threads;
 
 namespace Lesson2.Scenes
@@ -19,50 +19,35 @@ namespace Lesson2.Scenes
         /// Список звезд
         /// Создается единожды во время загрузки и больше не меняется
         /// </summary>
-        private List<GameObjects> _stars = new List<GameObjects>();
+        private readonly List<GameObjects> _stars = new List<GameObjects>();
         
         /// <summary>
         /// Очередь игровых объектов которые появляются
         /// </summary>
-        private Queue<GameObjects> _objects = new Queue<GameObjects>();
+        private readonly Queue<GameObjects> _objects = new Queue<GameObjects>();
 
         /// <summary>
         /// Список астероидов
         /// Пополняется и удаляется на лету, поэтому используется потокобезопасный список
         /// </summary>
-        private ThreadList<Asteroid> _asteroids = new ThreadList<Asteroid>();
+        private readonly ThreadList<Asteroid> _asteroids = new ThreadList<Asteroid>();
 
         /// <summary>
         /// Список пуль
         /// Пополняется и удаляется на лету, поэтому используется потокобезопасный список
         /// </summary>
-        private ThreadList<Bullet> _bullets = new ThreadList<Bullet>();
+        private readonly ThreadList<Bullet> _bullets = new ThreadList<Bullet>();
         
         /// <summary>
         /// Список аптечек
         /// Пополняется и удаляется на лету, поэтому используется потокобезопасный список
         /// </summary>
-        private ThreadList<Medic> _medics = new ThreadList<Medic>();
+        private readonly ThreadList<Medic> _medics = new ThreadList<Medic>();
 
         /// <summary>
         /// Коспический корабль игрока
         /// </summary>
         private SpaceShip _ship;
-        
-        /// <summary>
-        /// Основной таймер игры
-        /// </summary>
-        private Timer _timer;
-        
-        /// <summary>
-        /// Количество объектов в волне
-        /// </summary>
-        private int _count;
-
-        /// <summary>
-        /// Флаг определения, что событие о новой волне отправлено
-        /// </summary>
-        private StageCompleteState _stageCompleteState;
 
         /// <summary>
         /// Объект игрока
@@ -70,8 +55,30 @@ namespace Lesson2.Scenes
         /// </summary>
         private Player _player;
 
+        /// <summary>
+        /// Состояние волны
+        /// </summary>
+        private WaveState _waveState;
+        
+        /// <summary>
+        /// Состояние создания новой волны
+        /// </summary>
+        private readonly GenerateWaveState _generateWaveState = new GenerateWaveState();
+        
+        /// <summary>
+        /// Состояние забрасывания нового объекта волны на сцену
+        /// </summary>
+        private readonly ThrowObjectWaveState _throwObjectWaveState = new ThrowObjectWaveState();
+        
+        /// <summary>
+        /// Состояние ожидания генерации новой волны
+        /// </summary>
+        private readonly WaitForNewWaveState _waitForNewWaveState = new WaitForNewWaveState();
+
         protected override void OnUpdate(float delta)
         {
+            _waveState?.Update(delta);
+            
             try
             {
                 _asteroids.ForEach(asteroid => asteroid.Collision(_ship));
@@ -117,7 +124,7 @@ namespace Lesson2.Scenes
 
         public override void OnShown()
         {
-            _timer.Start();
+            
         }
 
         protected override void OnLoad()
@@ -125,14 +132,16 @@ namespace Lesson2.Scenes
             Logger.Print("Space scene start load");
 
             EventManager.AddEventListener(EventManager.Events.ShootEvent, Shoot);
+            EventManager.AddEventListener(EventManager.Events.WaveNextObjectEvent, OnNextObject);
             EventManager.AddEventListener(EventManager.Events.StageCompletedEvent, OnStageCompleted);
             EventManager.AddEventListener(EventManager.Events.StageGeneratedEvent, OnStageGenerated);
+            EventManager.AddEventListener(EventManager.Events.StageGenerateEvent, OnStageGenerate);
             
-            _stageCompleteState = new StageCompleteDispatchState();
-            
-            _player = new Player();
+            _generateWaveState.Init(_objects);
+            _throwObjectWaveState.Init(_objects);
+            _waitForNewWaveState.Init(_objects);
 
-            _count = 10;
+            _player = new Player();
 
             _stars.Clear();
             _asteroids.Clear();
@@ -147,28 +156,35 @@ namespace Lesson2.Scenes
 
             _ship = GameObjectsFactory.CreateSpaceShip();
 
-            _timer = new Timer();
-            _timer.Interval = 1000;
-            _timer.Elapsed += TimerOnTick;
-
             AddDrawable(_stars);
             AddDrawable(_ship);
 
             AddUpdatable(_stars);
-            
-            LoadQueue();
+         
+            EventManager.DispatchEvent(EventManager.Events.StageGenerateEvent);
         }
 
-        private void TimerOnTick(object sender, EventArgs e)
+        protected override void OnDraw(Graphics graphics)
         {
-            if (_objects.Count == 0)
-            {
-                _stageCompleteState = _stageCompleteState.DoDispatch();
+            
+        }
 
-                return;
-            }
-                
-            var obj = _objects.Dequeue();
+        /// <summary>
+        /// Обработчик события генерации новой волны
+        /// </summary>
+        /// <param name="args"></param>
+        private void OnStageGenerate(IEventArgs args)
+        {
+            _waveState = _generateWaveState;
+        }
+
+        /// <summary>
+        /// Обработчик события добавления нового объекта волны на сцену
+        /// </summary>
+        /// <param name="args"></param>
+        private void OnNextObject(IEventArgs args)
+        {
+            var obj = (args as ThrowObjectWaveEventArgs)?.Object;
             switch (obj)
             {
                 case Asteroid _:
@@ -189,26 +205,16 @@ namespace Lesson2.Scenes
         /// <param name="arg"></param>
         private void OnStageCompleted(IEventArgs arg)
         {
-            _timer.Stop();
-            var timer = new Timer {Interval = 5000};
-            timer.Elapsed += (sender, args) =>
-            {
-                timer.Stop();
-                LoadQueue();
-                EventManager.DispatchEvent(EventManager.Events.StageGeneratedEvent);
-            };
-            timer.Start();
+            _waveState = _waitForNewWaveState;
         }
 
+        /// <summary>
+        /// Обработчик события успешной генерации волны
+        /// </summary>
+        /// <param name="args"></param>
         private void OnStageGenerated(IEventArgs args)
         {
-            _timer.Start();
-            _stageCompleteState = new StageCompleteDispatchState();
-        }
-
-        protected override void OnDraw(Graphics graphics)
-        {
-            
+            _waveState = _throwObjectWaveState;
         }
 
         // TODO: добавить отграничение скорострельность
@@ -222,65 +228,6 @@ namespace Lesson2.Scenes
             _bullets.Add(bullet);
             AddDrawable(bullet);
         }
-
-        /// <summary>
-        /// Метод генерации новой волны
-        /// </summary>
-        private void LoadQueue()
-        {
-            var random = new Random();
-            for (int i = 0; i < _count; i++)
-            {
-                GameObjects obj;
-                var next = random.Next(100);
-                if (next % 10 == 0)
-                {
-                    obj = GameObjectsFactory.CreateMedic();
-                }
-                else
-                {
-                    obj = GameObjectsFactory.CreateAsteroid();
-                }
-
-                _objects.Enqueue(obj);
-            }
-            _count++;
-        }
         
-    }
-
-    /// <summary>
-    /// Состояние для запуска окончания волны
-    /// </summary>
-    public class StageCompleteDispatchState : StageCompleteState
-    {
-        public override StageCompleteState DoDispatch()
-        {
-            EventManager.DispatchEvent(EventManager.Events.StageCompletedEvent);
-            return new StageCompleteDispatchedState();
-        }
-    }
-
-    /// <summary>
-    /// Состояние после запуска события окончания волны
-    /// </summary>
-    public class StageCompleteDispatchedState : StageCompleteState
-    {
-        public override StageCompleteState DoDispatch()
-        {
-            return this;
-        }
-    }
-
-    /// <summary>
-    /// Базовый класс состояния прохождения волны
-    /// </summary>
-    public abstract class StageCompleteState
-    {
-        /// <summary>
-        /// Запуск события окончания волны
-        /// </summary>
-        /// <returns></returns>
-        public abstract StageCompleteState DoDispatch();
     }
 }

@@ -37,9 +37,17 @@ namespace Lesson2.Events
             /// </summary>
             StageCompletedEvent,
             /// <summary>
+            /// Событие начала генерации новой волны 
+            /// </summary>
+            StageGenerateEvent,
+            /// <summary>
             /// Событие успешной генерации новой волны 
             /// </summary>
-            StageGeneratedEvent
+            StageGeneratedEvent,
+            /// <summary>
+            /// Событие появления нового объекта волны
+            /// </summary>
+            WaveNextObjectEvent
         }
 
         public delegate void EventFunc(IEventArgs args);

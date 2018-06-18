@@ -9,7 +9,7 @@
           <e p="Asteroid.cs" t="Include" />
           <e p="BaseObjects" t="Include">
             <e p="CollisionKillableGameObjects.cs" t="Include" />
-            <e p="GameObjectException.cs" t="Include" />
+            <e p="GameException.cs" t="Include" />
             <e p="GameObjects.cs" t="Include" />
             <e p="ICollision.cs" t="Include" />
             <e p="IDrawable.cs" t="Include" />
@@ -31,6 +31,7 @@
           <e p="GameEventArgs.cs" t="Include" />
           <e p="IEventArgs.cs" t="Include" />
           <e p="MouseMoveGameEvent.cs" t="Include" />
+          <e p="ThrowObjectWaveEventArgs.cs" t="Include" />
         </e>
         <e p="GameForm.cs" t="Include" />
         <e p="Lesson2.csproj" t="IncludeRecursive" />
@@ -56,6 +57,12 @@
             <e p="SceneState.cs" t="Include" />
             <e p="SceneStateLoaded.cs" t="Include" />
             <e p="SceneStateLoading.cs" t="Include" />
+            <e p="SpaceSceneStates" t="Include">
+              <e p="GenerateWaveState.cs" t="Include" />
+              <e p="ThrowObjectWaveState.cs" t="Include" />
+              <e p="WaitForNewWaveState.cs" t="Include" />
+              <e p="WaveState.cs" t="Include" />
+            </e>
             <e p="SplashSceneStates" t="Include">
               <e p="SplashSceneState.cs" t="Include" />
               <e p="SplashSceneStateEnd.cs" t="Include" />
