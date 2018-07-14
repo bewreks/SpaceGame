@@ -1,103 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lesson2.Events
 {
-    public static class EventManager
+    public static class EventManager<T>
     {
-        public enum Events
+        private static readonly Dictionary<string, Delegate> _handlers = new Dictionary<string, Delegate>();
+        
+        public static void AddEventListener(string eventType, Action<T> handler)
         {
-            /// <summary>
-            /// Событие нажатия кнопки вверх
-            /// </summary>
-            UpEvent,
-            /// <summary>
-            /// Событие нажатия кнопки вниз
-            /// </summary>
-            DownEvent,
-            /// <summary>
-            /// Событие выстрела
-            /// </summary>
-            ShootEvent,
-            /// <summary>
-            /// Событие движения мыши
-            /// Требуется MouseMoveGameEvent
-            /// </summary>
-            MoveEvent,
-            /// <summary>
-            /// Событие изменения счета
-            /// </summary>
-            ChangeScoreEvent,
-            /// <summary>
-            /// Событие обновления энергии
-            /// </summary>
-            ChangeEnergyEvent,
-            /// <summary>
-            /// Событие завершения волны
-            /// </summary>
-            StageCompletedEvent,
-            /// <summary>
-            /// Событие начала генерации новой волны 
-            /// </summary>
-            StageGenerateEvent,
-            /// <summary>
-            /// Событие успешной генерации новой волны 
-            /// </summary>
-            StageGeneratedEvent,
-            /// <summary>
-            /// Событие появления нового объекта волны
-            /// </summary>
-            WaveNextObjectEvent,
-            /// <summary>
-            /// Событие окончания игры
-            /// </summary>
-            GameEndEvent
+            _handlers[eventType] = Delegate.Combine(GetDelegate(eventType), handler);
         }
 
-        public delegate void EventFunc(IEventArgs args);
-
-        private static Dictionary<Events, EventFunc> _container = new Dictionary<Events, EventFunc>();
-
-        /// <summary>
-        /// Отправка события с базовыми аргументами
-        /// </summary>
-        /// <param name="e">Событие</param>
-        public static void DispatchEvent(Events e)
+        public static void RemoveEventListener(string eventType, Action<T> handler)
         {
-            DispatchEvent(e, new GameEventArgs());
+            _handlers[eventType] = Delegate.Remove(GetDelegate(eventType), handler);
         }
 
-        /// <summary>
-        /// Отправка события с кастомными аргументами
-        /// </summary>
-        /// <param name="e"></param>
-        /// <param name="args"></param>
-        public static void DispatchEvent(Events e, IEventArgs args)
+        public static void DispatchEvent(string eventType, T args)
         {
+            Action<T>[] invocationList;
             try
             {
-                _container[e]?.Invoke(args);
+                invocationList = GetDelegate(eventType).GetInvocationList().Cast<Action<T>>().ToArray();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                invocationList = new Action<T>[0];
+            }
+            
+            foreach (var action in invocationList)
+            {
+                action.Invoke(args);
             }
         }
 
-        /// <summary>
-        /// Добавление слушателя события
-        /// </summary>
-        /// <param name="e"></param>
-        /// <param name="func"></param>
-        public static void AddEventListener(Events e, EventFunc func)
+        private static Delegate GetDelegate(string eventType)
         {
-            if (!_container.ContainsKey(e))
+            Delegate @delegate;
+            try
             {
-                _container.Add(e, func);
+                @delegate = _handlers[eventType];
             }
-            else
+            catch (Exception e)
             {
-                _container[e] += func;
+                @delegate = null;
             }
+
+            return @delegate;
+        }
+    }
+
+    public static class EventManager
+    {
+        public static void AddEventListener(string eventType, Action<GameEventArgs> handler)
+        {
+            EventManager<GameEventArgs>.AddEventListener(eventType, handler);
+        }
+
+        public static void RemoveEventListener(string eventType, Action<GameEventArgs> handler)
+        {
+            EventManager<GameEventArgs>.RemoveEventListener(eventType, handler);
+        }
+
+        public static void DispatchEvent(string eventType)
+        {
+            EventManager<GameEventArgs>.DispatchEvent(eventType, new GameEventArgs());
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Lesson2.States.Scenes.SpaceSceneStates
             if (_timer >= 5)
             {
                 Logger.Print("Волна создается");
-                EventManager.DispatchEvent(EventManager.Events.StageGenerateEvent);
+                EventManager.DispatchEvent(GameEvents.STAGE_GENERATE);
                 _timer = 0;
             }
         }

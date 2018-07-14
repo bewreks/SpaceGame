@@ -131,11 +131,11 @@ namespace Lesson2.Scenes
         {
             Logger.Print("Space scene start load");
 
-            EventManager.AddEventListener(EventManager.Events.ShootEvent, Shoot);
-            EventManager.AddEventListener(EventManager.Events.WaveNextObjectEvent, OnNextObject);
-            EventManager.AddEventListener(EventManager.Events.StageCompletedEvent, OnStageCompleted);
-            EventManager.AddEventListener(EventManager.Events.StageGeneratedEvent, OnStageGenerated);
-            EventManager.AddEventListener(EventManager.Events.StageGenerateEvent, OnStageGenerate);
+            EventManager<ThrowObjectWaveEventArgs>.AddEventListener(GameEvents.WAVE_NEXT_OBJECT, OnNextObject);
+            EventManager.AddEventListener(GameEvents.SHOOT, Shoot);
+            EventManager.AddEventListener(GameEvents.STAGE_COMPLETE ,OnStageCompleted);
+            EventManager.AddEventListener(GameEvents.STAGE_GENERATED, OnStageGenerated);
+            EventManager.AddEventListener(GameEvents.STAGE_GENERATE, OnStageGenerate);
             
             _generateWaveState.Init(_objects);
             _throwObjectWaveState.Init(_objects);
@@ -161,7 +161,7 @@ namespace Lesson2.Scenes
 
             AddUpdatable(_stars);
          
-            EventManager.DispatchEvent(EventManager.Events.StageGenerateEvent);
+            EventManager.DispatchEvent(GameEvents.STAGE_GENERATE);
         }
 
         protected override void OnDraw(Graphics graphics)
@@ -173,7 +173,7 @@ namespace Lesson2.Scenes
         /// Обработчик события генерации новой волны
         /// </summary>
         /// <param name="args"></param>
-        private void OnStageGenerate(IEventArgs args)
+        private void OnStageGenerate(GameEventArgs args)
         {
             _waveState = _generateWaveState;
         }
@@ -182,9 +182,9 @@ namespace Lesson2.Scenes
         /// Обработчик события добавления нового объекта волны на сцену
         /// </summary>
         /// <param name="args"></param>
-        private void OnNextObject(IEventArgs args)
+        private void OnNextObject(ThrowObjectWaveEventArgs args)
         {
-            var obj = (args as ThrowObjectWaveEventArgs)?.Object;
+            var obj = args.Object;
             switch (obj)
             {
                 case Asteroid _:
@@ -203,7 +203,7 @@ namespace Lesson2.Scenes
         /// Обработчик события окончания волны
         /// </summary>
         /// <param name="arg"></param>
-        private void OnStageCompleted(IEventArgs arg)
+        private void OnStageCompleted(GameEventArgs arg)
         {
             _waveState = _waitForNewWaveState;
         }
@@ -212,7 +212,7 @@ namespace Lesson2.Scenes
         /// Обработчик события успешной генерации волны
         /// </summary>
         /// <param name="args"></param>
-        private void OnStageGenerated(IEventArgs args)
+        private void OnStageGenerated(GameEventArgs args)
         {
             _waveState = _throwObjectWaveState;
         }
@@ -222,7 +222,7 @@ namespace Lesson2.Scenes
         /// Обработчик события выстрела
         /// </summary>
         /// <param name="args"></param>
-        private void Shoot(IEventArgs args)
+        private void Shoot(GameEventArgs args)
         {
             var bullet = GameObjectsFactory.CreateBullet(_ship.GetPoint());
             _bullets.Add(bullet);

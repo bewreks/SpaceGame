@@ -21,23 +21,23 @@ namespace Lesson2
             _hp = 100;
             _score = 0;
             
-            EventManager.AddEventListener(EventManager.Events.ChangeScoreEvent, OnChangeScore);
-            EventManager.AddEventListener(EventManager.Events.ChangeEnergyEvent, OnChangeEvent);
+            EventManager<ChangeScoreEvent>.AddEventListener(GameEvents.CHANGE_SCORE, OnChangeScore);
+            EventManager<ChangeScoreEvent>.AddEventListener(GameEvents.CHANGE_ENERGY, OnChangeEvent);
         }
 
-        private void OnChangeEvent(IEventArgs args)
+        private void OnChangeEvent(ChangeScoreEvent args)
         {
-            _hp += (args as ChangeScoreEvent)?.Score??0;
+            _hp += args.Score;
             Logger.Print("HP: {0}", Hp);
             if (_hp <= 0)
             {
-                EventManager.DispatchEvent(EventManager.Events.GameEndEvent, new GameEndEventArgs(_score, _wave));
+                EventManager<GameEndEventArgs>.DispatchEvent(GameEvents.GAME_END, new GameEndEventArgs(_score, _wave));
             }
         }
 
-        private void OnChangeScore(IEventArgs args)
+        private void OnChangeScore(ChangeScoreEvent args)
         {
-            _score += (args as ChangeScoreEvent)?.Score??0;
+            _score += args.Score;
             Logger.Print("Score: {0}", Score);
         }
     }

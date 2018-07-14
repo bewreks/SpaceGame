@@ -31,22 +31,21 @@ namespace Lesson2.Drawables
             _graphicsPath.Transform(matrix);
 
             // Оставлю возможность управления с клавиатуры
-            EventManager.AddEventListener(EventManager.Events.UpEvent, Up);
-            EventManager.AddEventListener(EventManager.Events.DownEvent, Down);
-            EventManager.AddEventListener(EventManager.Events.MoveEvent, Move);
+            EventManager.AddEventListener(GameEvents.UP, Up);
+            EventManager.AddEventListener(GameEvents.DOWN, Down);
+            EventManager<MouseMoveGameEvent>.AddEventListener(GameEvents.MOVE, Move);
         }
 
         /// <summary>
         /// Обработчик события движения мышью
         /// </summary>
         /// <param name="args"></param>
-        private void Move(IEventArgs args)
+        private void Move(MouseMoveGameEvent args)
         {
             lock (_graphicsPath)
             {
-                var arg = args as MouseMoveGameEvent;
-                float i = (arg?.Y ?? 0) - (_prEventArgs?.Y ?? 0);
-                _prEventArgs = arg;
+                float i = args.Y - (_prEventArgs?.Y ?? 0);
+                _prEventArgs = args;
 
                 _position.Y = _position.Y + i;
                 var matrix = new Matrix();
@@ -60,7 +59,7 @@ namespace Lesson2.Drawables
         /// Обработчик события нажатия кнопки вниз
         /// </summary>
         /// <param name="args"></param>
-        private void Down(IEventArgs args)
+        private void Down(GameEventArgs args)
         {
             lock (_graphicsPath)
             {
@@ -81,7 +80,7 @@ namespace Lesson2.Drawables
         /// Обработчик события нажатия кнопки вверх
         /// </summary>
         /// <param name="args"></param>
-        private void Up(IEventArgs args)
+        private void Up(GameEventArgs args)
         {
             lock (_graphicsPath)
             {
@@ -116,16 +115,16 @@ namespace Lesson2.Drawables
             switch (obj)
             {
                 case Asteroid _:
-                    EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
+                    EventManager<ChangeScoreEvent>.DispatchEvent(GameEvents.CHANGE_SCORE,
                         new ChangeScoreEvent(-((Asteroid) obj).Score));
-                    EventManager.DispatchEvent(EventManager.Events.ChangeEnergyEvent,
+                    EventManager<ChangeScoreEvent>.DispatchEvent(GameEvents.CHANGE_ENERGY,
                         new ChangeScoreEvent(-((Asteroid) obj).Energy));
                     break;
 
                 case Medic _:
-                    EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
-                        new ChangeScoreEvent(((Medic) obj).Score));////////
-                    EventManager.DispatchEvent(EventManager.Events.ChangeEnergyEvent,
+                    EventManager<ChangeScoreEvent>.DispatchEvent(GameEvents.CHANGE_SCORE,
+                        new ChangeScoreEvent(((Medic) obj).Score));
+                    EventManager<ChangeScoreEvent>.DispatchEvent(GameEvents.CHANGE_ENERGY,
                         new ChangeScoreEvent(((Medic) obj).Energy));
                     break;
             }

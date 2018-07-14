@@ -45,14 +45,16 @@ namespace Lesson2
             KeyDown += OnKeyDown;
             MouseMove += OnMouseMove;
             MouseDown += OnMouseClick;
-            
-            EventManager.AddEventListener(EventManager.Events.GameEndEvent, args =>
-            {
-                Drawer.SetScene(new SplashScene());
-                Logger.Print("Игра окончена со счетом {0} на {1} волне", (args as GameEndEventArgs).Score, (args as GameEndEventArgs).Wave);
-            });
+
+            EventManager<GameEndEventArgs>.AddEventListener(GameEvents.GAME_END, OnGameEnd);
 
             Drawer.Init(this);
+        }
+
+        private void OnGameEnd(GameEndEventArgs args)
+        {
+            Drawer.SetScene(new SplashScene());
+            Logger.Print("Игра окончена со счетом {0} на {1} волне", args.Score, args.Wave);
         }
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace Lesson2
         }
 
         #region EventRegion
-        
+
         /// <summary>
         /// Метод обработки клика
         /// Запускает событие выстрела
@@ -77,7 +79,7 @@ namespace Lesson2
         /// <param name="e"></param>
         private void OnMouseClick(object sender, MouseEventArgs e)
         {
-            EventManager.DispatchEvent(EventManager.Events.ShootEvent);
+            EventManager.DispatchEvent(GameEvents.SHOOT);
         }
 
         /// <summary>
@@ -88,7 +90,7 @@ namespace Lesson2
         /// <param name="e"></param>
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
-            EventManager.DispatchEvent(EventManager.Events.MoveEvent, new MouseMoveGameEvent(e.X, e.Y));
+            EventManager<MouseMoveGameEvent>.DispatchEvent(GameEvents.MOVE, new MouseMoveGameEvent(e.X, e.Y));
         }
 
         /// <summary>
@@ -102,13 +104,13 @@ namespace Lesson2
             switch (e.KeyCode)
             {
                 case Keys.Up:
-                    EventManager.DispatchEvent(EventManager.Events.UpEvent);
+                    EventManager.DispatchEvent(GameEvents.UP);
                     break;
                 case Keys.Down:
-                    EventManager.DispatchEvent(EventManager.Events.DownEvent);
+                    EventManager.DispatchEvent(GameEvents.DOWN);
                     break;
                 case Keys.ControlKey:
-                    EventManager.DispatchEvent(EventManager.Events.ShootEvent);
+                    EventManager.DispatchEvent(GameEvents.SHOOT);
                     break;
             }
         }
@@ -139,7 +141,7 @@ namespace Lesson2
 
             _gameThread.Start();
         }
-        #endregion
 
+        #endregion
     }
 }

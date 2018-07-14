@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\bewreks\.Rider2018.1\system\resharper-host\local\Transient\ReSharperHost\v12\SolutionCaches\_Lesson2.1965162659.00" t="ExcludeRecursive" />
-    <e p="E:\Work\c#\GB\Lesson2" t="IncludeFlat">
+    <e p="C:\Users\bewreks\.Rider2018.1\system\resharper-host\local\Transient\ReSharperHost\v12\SolutionCaches\_Lesson2.599346735.00" t="ExcludeRecursive" />
+    <e p="E:\Work\c#\GB\2nd\Lesson2" t="IncludeFlat">
       <e p="Lesson2" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
         <e p="Drawables" t="Include">
@@ -26,13 +26,16 @@
         </e>
         <e p="Drawer.cs" t="Include" />
         <e p="Events" t="Include">
-          <e p="ChangeScoreEvent.cs" t="Include" />
+          <e p="Args" t="Include">
+            <e p="ChangeScoreEvent.cs" t="Include" />
+            <e p="GameEndEventArgs.cs" t="Include" />
+            <e p="GameEventArgs.cs" t="Include" />
+            <e p="IEventArgs.cs" t="Include" />
+            <e p="MouseMoveGameEvent.cs" t="Include" />
+            <e p="ThrowObjectWaveEventArgs.cs" t="Include" />
+          </e>
           <e p="EventManager.cs" t="Include" />
-          <e p="GameEndEventArgs.cs" t="Include" />
-          <e p="GameEventArgs.cs" t="Include" />
-          <e p="IEventArgs.cs" t="Include" />
-          <e p="MouseMoveGameEvent.cs" t="Include" />
-          <e p="ThrowObjectWaveEventArgs.cs" t="Include" />
+          <e p="GameEvents.cs" t="Include" />
         </e>
         <e p="GameForm.cs" t="Include" />
         <e p="Lesson2.csproj" t="IncludeRecursive" />

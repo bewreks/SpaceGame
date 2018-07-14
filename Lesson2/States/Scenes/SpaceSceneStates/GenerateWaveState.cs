@@ -35,7 +35,7 @@ namespace Lesson2.States.Scenes.SpaceSceneStates
             }
             _wave++;
             Logger.Print("Волна создана {0}", _wave);
-            EventManager.DispatchEvent(EventManager.Events.StageGeneratedEvent);
+            EventManager.DispatchEvent(GameEvents.STAGE_GENERATED);
         }
     }
 }

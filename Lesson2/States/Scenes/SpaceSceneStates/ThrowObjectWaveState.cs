@@ -14,7 +14,7 @@ namespace Lesson2.States.Scenes.SpaceSceneStates
             if (_objects.Count == 0)
             {
                 Logger.Print("Волна окончена");
-                EventManager.DispatchEvent(EventManager.Events.StageCompletedEvent);
+                EventManager.DispatchEvent(GameEvents.STAGE_COMPLETE);
 
                 return;
             }
@@ -22,7 +22,7 @@ namespace Lesson2.States.Scenes.SpaceSceneStates
             if (_timer >= 1)
             {
                 Logger.Print("Новый объект");
-                EventManager.DispatchEvent(EventManager.Events.WaveNextObjectEvent, new ThrowObjectWaveEventArgs(_objects.Dequeue()));
+                EventManager<ThrowObjectWaveEventArgs>.DispatchEvent(GameEvents.WAVE_NEXT_OBJECT, new ThrowObjectWaveEventArgs(_objects.Dequeue()));
                 _timer = 0;
             }
         }

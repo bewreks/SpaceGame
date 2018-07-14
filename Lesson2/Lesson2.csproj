@@ -11,6 +11,7 @@
     <AssemblyName>Lesson2</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,13 +57,14 @@
     <Compile Include="Drawables\TextBox.cs" />
     <Compile Include="Drawables\XStar.cs" />
     <Compile Include="Drawer.cs" />
-    <Compile Include="Events\ChangeScoreEvent.cs" />
+    <Compile Include="Events\Args\ChangeScoreEvent.cs" />
+    <Compile Include="Events\Args\GameEndEventArgs.cs" />
+    <Compile Include="Events\Args\GameEventArgs.cs" />
+    <Compile Include="Events\Args\IEventArgs.cs" />
+    <Compile Include="Events\Args\MouseMoveGameEvent.cs" />
+    <Compile Include="Events\Args\ThrowObjectWaveEventArgs.cs" />
     <Compile Include="Events\EventManager.cs" />
-    <Compile Include="Events\GameEndEventArgs.cs" />
-    <Compile Include="Events\GameEventArgs.cs" />
-    <Compile Include="Events\IEventArgs.cs" />
-    <Compile Include="Events\MouseMoveGameEvent.cs" />
-    <Compile Include="Events\ThrowObjectWaveEventArgs.cs" />
+    <Compile Include="Events\GameEvents.cs" />
     <Compile Include="GameForm.cs" />
     <Compile Include="Loggers\ConsoleLogger.cs" />
     <Compile Include="Loggers\FileLogger.cs" />
@@ -86,6 +88,17 @@
     <Compile Include="States\Scenes\SplashSceneStates\SplashSceneStateLoad.cs" />
     <Compile Include="States\Scenes\SplashSceneStates\SplashSceneStateStart.cs" />
     <Compile Include="Threads\ThreadList.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

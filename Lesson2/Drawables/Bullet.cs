@@ -39,10 +39,10 @@ namespace Lesson2.Drawables
         public override void OnCollision(ICollision obj)
         {
             if (IsDead) return;
-            
+
             if (obj is Asteroid)
             {
-                EventManager.DispatchEvent(EventManager.Events.ChangeScoreEvent,
+                EventManager<ChangeScoreEvent>.DispatchEvent(GameEvents.CHANGE_SCORE,
                     new ChangeScoreEvent((obj as Asteroid).Score));
                 SystemSounds.Hand.Play();
             }
